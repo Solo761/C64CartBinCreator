@@ -4,6 +4,39 @@
   <artifactId>cartCreator</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>C64 Cartridge Creator</name>
+
+  <dependencies>
+	<!-- Logging -->
+	<!-- https://mvnrepository.com/artifact/org.slf4j/jcl-over-slf4j -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>jcl-over-slf4j</artifactId>
+	    <version>1.7.25</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-api</artifactId>
+	    <version>1.7.25</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+	<dependency>
+	    <groupId>ch.qos.logback</groupId>
+	    <artifactId>logback-classic</artifactId>
+	    <version>1.2.3</version>
+	</dependency>
+
+  
+  
+	<!-- TEST -->
+	<!-- https://mvnrepository.com/artifact/junit/junit -->
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.11</version>
+		<scope>test</scope>
+	</dependency>
+  </dependencies>
   
   <build>
   	<plugins>
