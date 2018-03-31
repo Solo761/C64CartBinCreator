@@ -2,11 +2,12 @@ package com.solo761.cartcreator.business.fsdao.impl;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 
 import org.junit.Test;
 
 import com.solo761.cartcreator.business.fsdao.FileDao;
-import com.solo761.cartcreator.business.fsdao.impl.FileDaoImpl;
 
 public class FileDaoImplTest{
 	
@@ -24,4 +25,14 @@ public class FileDaoImplTest{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	@Test
+	public void testFileTes() {
+		String fileString = "D:\\Test.tst";
+		File file = new File(fileString);
+		
+		System.out.println(file.isFile());
+	}
+	
 }

@@ -17,13 +17,9 @@ public class FileDaoImpl implements FileDao {
 	}
 	
 	@Override
-	public boolean saveFile(byte[] data, File file) throws IOException{
+	public void saveFile(byte[] data, File file) throws IOException{
 		Path path = file.toPath();
-		Path result = Files.write(path, data);
-		
-		if (!result.equals(path))
-			return false;
-		return true;
+		Files.write(path, data);
 	}
 
 }
