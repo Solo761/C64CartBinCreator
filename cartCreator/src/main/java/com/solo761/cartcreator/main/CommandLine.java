@@ -5,16 +5,15 @@ import java.io.IOException;
 
 import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.manager.impl.CartCreatorManagerImpl;
-import com.solo761.cartcreator.business.model.BinFileTemplate;
-import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
+import com.solo761.cartcreator.business.model.Arguments;
 
 public class CommandLine {
 	
 	private static CartCreatorManager cartCreatorManager = new CartCreatorManagerImpl();
 	
-	public void commandLine( String args[] ) {
+	public void commandLine( Arguments arguments ) {
 		
-		File prgFile = new File( args[0] ); 
+		File prgFile = new File( arguments.getInputFile() ); 
 		
 		if ( !prgFile.isFile() ) {
 			System.out.println( "First parameter is not a file!" );
@@ -25,31 +24,33 @@ public class CommandLine {
 			return;
 		}
 		
-		BinFileTemplate filePrep = new BinFileTemplate();
-		
-		filePrep.setHeaderPayload(CartCreatorByteArrays.huckyPrg2Crt);
+		byte[] prg = null; 
 		
 		try {
-			filePrep.setPrgPayload(cartCreatorManager.loadFile(prgFile));
+			prg = cartCreatorManager.loadFile(prgFile);
 		} catch (IOException e) {
 			System.out.println("Error reading file: " + prgFile.getName());
-			e.printStackTrace();
+			System.out.println( e.getMessage() );
 		}
 		
-		filePrep.setPrgSize(cartCreatorManager.calculatePrgSize(filePrep.getPrgPayload().length));
+		// TODO riješiti hendlanje extenzije
 		
-		// TODO dodati/smisliti prepoznavanje da li je args[1] ispravna putanja ili ne
 		String fileName = "";
 		
-		if (args.length > 1 && args[1] != null && args[1].length() > 0)
-			fileName = args[1];
+		if ( arguments.getOutputFile() != null )
+			fileName = arguments.getOutputFile();
 		else
 			fileName = prgFile.getName().substring(0, prgFile.getName().length() - 4);
 		
-		File outFile = new File((prgFile.getParent() != null ? prgFile.getParent() + "\\" : "")  + fileName + ".bin");
-
 		try {
-			cartCreatorManager.saveFile(filePrep.getFinalBin(), outFile);
+			if (arguments.isMakeCRT()) {
+				File outFile = new File((prgFile.getParent() != null ? prgFile.getParent() + "\\" : "")  + fileName + ".crt");
+				cartCreatorManager.saveFile(cartCreatorManager.createCRTFile(arguments.getCartType(), prg), outFile);
+			}
+			else {
+				File outFile = new File((prgFile.getParent() != null ? prgFile.getParent() + "\\" : "")  + fileName + ".bin");
+				cartCreatorManager.saveFile(cartCreatorManager.createBinFile(arguments.getCartType(), prg), outFile);
+			}
 		} catch (IOException e) {
 			System.out.println("Error writing file: " + prgFile.getName());
 			e.printStackTrace();

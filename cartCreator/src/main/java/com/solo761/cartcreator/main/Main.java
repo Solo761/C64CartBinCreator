@@ -1,5 +1,7 @@
 package com.solo761.cartcreator.main;
 
+import com.solo761.cartcreator.business.model.Arguments;
+import com.solo761.cartcreator.business.utils.CartCreatorArgumentParser;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 
 public class Main {
@@ -9,25 +11,30 @@ public class Main {
 
 	public static void main( String[] args ) {
 		
-		// no parameters entered
-		if ( args.length == 0 ) {
-			CartCreatorUtils.printHelp();
-			return;
-		}
-		// -h entered
-		else if ( (args.length == 1) && ("-h".equals(args[0])) ) {
-			CartCreatorUtils.printHelp();
-			return;
-		}
-		// all parameters come in pairs so if there isn't even number of parameters...
-		else if ( (args.length > 0) && (args.length % 2 != 0) ) {
-			System.out.println("Wrong parameters entered");
-			System.out.println("");
-			CartCreatorUtils.printHelp();
-			return;
-		}
+		Arguments arguments = null;
 		
-		commandLine.commandLine(args);
+		if ( args.length > 0 ) {
+			arguments = CartCreatorArgumentParser.parseArguments(args);
+			if ( arguments.isHelp() ) {
+				CartCreatorUtils.printHelp();
+				return;
+			}
+			if ( arguments.getErrors().length() > 0 ) {
+				System.out.println( System.lineSeparator() + 
+									System.lineSeparator() +
+									arguments.getErrors() );
+				System.out.println( System.lineSeparator() + 
+									System.lineSeparator() + 
+									"Try -h for help" );
+				return;
+			}
+		}
+		else {
+			System.out.println( "No parameters entered" );
+			return;
+		}
+			
+		commandLine.commandLine(arguments);
 		
 	}
 

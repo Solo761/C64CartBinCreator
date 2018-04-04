@@ -3,6 +3,7 @@ package com.solo761.cartcreator.business.CRTgenerator;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 
 public class CRTGenerator {
@@ -38,18 +39,39 @@ public class CRTGenerator {
 	
 	
 	
-	public byte[] makeCRT( byte[] payload, String type ) {
-		int banks = (payload.length / 0x2000) + 1 ;
+	/**
+	 * This method splits bin file in 8k banks and inserts header and lines required by CRT "rules"
+	 * @param trimmedBin	- prepared bin file, but without filler zero bytes (although I suspect it would work the same with them)
+	 * @param type			- CartType enum 
+	 * @return <b>byte[]</b>	- prepared CRT file
+	 */
+	public byte[] makeCRT( byte[] trimmedBin, CartTypes type ) {
+		int banks = (trimmedBin.length / 0x2000) + 1 ;
 		
 		final int block = 8192;
 		
 		byte[] cartType;
-		if ("ih".equals(type))
-			cartType = rgcdSignature.clone();
-		else if ("md".equals(type))
-			cartType = magicDeskSignature.clone();
-		else
+		
+		switch (type) {
+		case HUCKY:
 			cartType = new byte[] { (byte)0xFF, (byte)0xFF };
+			break;
+		case INVERTEDHUCKY:
+			cartType = rgcdSignature.clone();
+			break;
+		case MAGICDESK:
+			cartType = magicDeskSignature.clone();
+			break;
+		case SIXTEENK:
+			cartType = new byte[] { (byte)0xFF, (byte)0xFF };
+			break;
+		case EIGHTK:
+			cartType = new byte[] { (byte)0xFF, (byte)0xFF };
+			break;
+		default:
+			cartType = new byte[] { (byte)0xFF, (byte)0xFF };
+			break;
+		}
 		
 		byte[] crtHeader = CartCreatorUtils.concatenateByteArrays(	crtSignature, 
 																	headerLength, 
@@ -74,9 +96,9 @@ public class CRTGenerator {
 															chipBankNumber,
 															chipLoadAddress,
 															chipRomImageSize ));
-			b.put(Arrays.copyOfRange(	payload, 
+			b.put(Arrays.copyOfRange(	trimmedBin, 
 										x * block, 
-										((x+1) * block) > payload.length ? (payload.length) : ((x+1) * block) ));
+										((x+1) * block) > trimmedBin.length ? (trimmedBin.length) : ((x+1) * block) ));
 		}
 		
 		return b.array();

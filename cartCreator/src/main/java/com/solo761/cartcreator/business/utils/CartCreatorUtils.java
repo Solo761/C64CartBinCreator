@@ -5,51 +5,66 @@ import java.nio.ByteBuffer;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 
-import javax.swing.ButtonGroup;
-
 public class CartCreatorUtils {
 	
 	
 	/**
-	 * Method test input string if it conforms to<br>
+	 * Test input string if it conforms to<br>
 	 * rules for file and folder naming on operating<br>
 	 * system it's run on. Should work on Windows and *nix<br>
-	 * based OS's.
+	 * based OS's.<br>
+	 * Returns <b>true</b> if path is OK
 	 * @param path - String to be tested
 	 * @return <b>boolean</b>
 	 */
-	public static boolean pathTest(String path) {
+	public static boolean pathTest( String path ) {
 		try{
-		    Paths.get(new File(path).toURI());
-		}catch (InvalidPathException err){
+		    Paths.get( new File( path ).toURI() );
+		}catch ( InvalidPathException err ){
 			return false;
 		}
 		return true;
 	}
 	
-//	public static byte[] concatenateByteArrays(byte[] firstArray, byte[] secondArray) {
-//		ByteBuffer b = ByteBuffer.allocate(firstArray.length + secondArray.length);
-//		b.put(firstArray);
-//		b.put(secondArray);
-//		return b.array();
-//	}
+	/**
+	 * Tests string to see if it's existing file on the file system<br>
+	 * Returns <b>true</b> if file path is OK
+	 * @param filePath - String to be tested
+	 * @return <b>boolean</b>
+	 */
+	public static boolean isFile( String filePath ) {
+		File file = new File( filePath );
+		
+		if ( !file.isFile() )
+			return false;
+
+		return true;
+	}
 	
-	public static byte[] concatenateByteArrays(byte[] ... arrays ) {
+	/**
+	 * Takes "n" byte arrays and returns them concatenated  
+	 * @param arrays - arrays to be concatenated
+	 * @return <b>byte[]</b> - concatenated byte array
+	 */
+	public static byte[] concatenateByteArrays( byte[] ... arrays ) {
 		int size = 0;
 		
-		for (byte[] array : arrays) {
+		for ( byte[] array : arrays ) {
 			size += array.length; 
 		}
 		
-		ByteBuffer b = ByteBuffer.allocate(size);
+		ByteBuffer b = ByteBuffer.allocate( size );
 		
-		for (byte[] array : arrays) {
-			b.put(array);
+		for ( byte[] array : arrays ) {
+			b.put( array );
 		}
 		
 		return b.array();
 	}
 	
+	/**
+	 * <i>sysouts</i> help for command line usage
+	 */
 	public static void printHelp() {
 		String help = "Parameters:\r\n" + 
 				"  -i <input file>		prg file to convert\r\n" + 
@@ -75,6 +90,6 @@ public class CartCreatorUtils {
 				"Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice)\r\n" + 
 				"  java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md";
 		
-		System.out.println(help);
+		System.out.println( System.lineSeparator() + help );
 	}
 }

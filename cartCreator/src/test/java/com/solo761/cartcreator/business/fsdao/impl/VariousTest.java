@@ -1,23 +1,18 @@
 package com.solo761.cartcreator.business.fsdao.impl;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import com.solo761.cartcreator.business.CRTgenerator.CRTGenerator;
 import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.manager.impl.CartCreatorManagerImpl;
-import com.solo761.cartcreator.business.model.BinFileTemplate;
-import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
+import com.solo761.cartcreator.business.model.CartTypes;
 
 public class VariousTest {
 	
-	private CRTGenerator crtGenerator = new CRTGenerator(); 
 	private CartCreatorManager cartCreatorManager = new CartCreatorManagerImpl();
 	
 	@Test
@@ -27,7 +22,7 @@ public class VariousTest {
 		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit 3 1.0.0.0 Setup A.exe";
 		String fileString = "D:\\Electronics\\_Tools\\_Picki t3\\1.0.0\\ICkit31.0.0.0SetupA.exe";
 		
-		Pattern pattern = Pattern.compile(pathRegex);
+		//Pattern pattern = Pattern.compile(pathRegex);
 		
 		boolean isPath = Pattern.matches(pathRegex, fileString);
 		
@@ -64,16 +59,9 @@ public class VariousTest {
 		try {
 			File file = new File(ClassLoader.getSystemResource("prg/Bubble Bobble.prg").toURI());
 			//File file = new File("D:\\_Coding\\_Workspace\\CartBinCreator\\git\\cartCreator\\src\\test\\resources\\prg\\Bubble Bobble.prg");
-			byte[] content = null;
+			byte[] content = cartCreatorManager.loadFile(file);
 			
-			content = cartCreatorManager.loadFile(file);
-			
-			BinFileTemplate filePrep = new BinFileTemplate();
-			filePrep.setHeaderPayload(CartCreatorByteArrays.huckyPrg2Crt);
-			filePrep.setPrgPayload(content);
-			filePrep.setPrgSize(cartCreatorManager.calculatePrgSize(content.length));
-			
-			byte[] crt = crtGenerator.makeCRT(filePrep.getCRTTemp(), "ih");
+			byte[] crt = cartCreatorManager.createCRTFile(CartTypes.INVERTEDHUCKY, content);
 			
 			cartCreatorManager.saveFile(crt, new File("d:\\test.crt") );
 			
@@ -83,15 +71,4 @@ public class VariousTest {
 		}
 	}
 	
-	@Test
-	public void bufferTest() {
-		ByteBuffer bb = ByteBuffer.allocate(10);
-		bb.put((byte)0x55);
-		bb.flip();
-		
-		for (byte b : bb.array()) {		
-			System.out.println(b);
-		}
-		
-	}
 }
