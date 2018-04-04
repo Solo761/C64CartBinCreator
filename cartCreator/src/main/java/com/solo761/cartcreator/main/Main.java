@@ -1,5 +1,7 @@
 package com.solo761.cartcreator.main;
 
+import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+
 public class Main {
 	
 	//private static final Logger	LOGGER	= LoggerFactory.getLogger( Main.class );
@@ -7,9 +9,21 @@ public class Main {
 
 	public static void main( String[] args ) {
 		
+		// no parameters entered
 		if ( args.length == 0 ) {
-			System.out.println( "You need to enter at least input file" );
-			System.out.println( "path for this to work." );
+			CartCreatorUtils.printHelp();
+			return;
+		}
+		// -h entered
+		else if ( (args.length == 1) && ("-h".equals(args[0])) ) {
+			CartCreatorUtils.printHelp();
+			return;
+		}
+		// all parameters come in pairs so if there isn't even number of parameters...
+		else if ( (args.length > 0) && (args.length % 2 != 0) ) {
+			System.out.println("Wrong parameters entered");
+			System.out.println("");
+			CartCreatorUtils.printHelp();
 			return;
 		}
 		

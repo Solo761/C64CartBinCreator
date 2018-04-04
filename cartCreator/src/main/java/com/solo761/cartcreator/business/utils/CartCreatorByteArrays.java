@@ -1,11 +1,11 @@
 package com.solo761.cartcreator.business.utils;
 
-public class Constants {
+public class CartCreatorByteArrays {
 	
 	// zapravo alternativni hucky, iz prg2crt.py-a header ga ne čini invertiranim nego bin konfiguracija
 	// jedino je obavezno da ide na hucky PCB (byte 008F - 08)
 	/**
-	 * BIN startup code, without prg size in bytes - 2 bytes
+	 * BIN startup code, hucky board style
 	 */
 	public static final byte[] huckyPrg2Crt = {
 			(byte)0x09, (byte)0x80, (byte)0x09, (byte)0x80, (byte)0xC3, (byte)0xC2,
@@ -38,6 +38,9 @@ public class Constants {
 	
 	// ovo je isti header kao gore samo je komanda za "prebacivanje" banke od magicDesk-a
 	// (tj. byte 008F - 08)
+	/**
+	 * BIN startup code, MagicDesk board style
+	 */
 	public static final byte magicDeskPrg2Crt[] = {
 			(byte)0x09, (byte)0x80, (byte)0x09, (byte)0x80, (byte)0xC3, (byte)0xC2,
 			(byte)0xCD, (byte)0x38, (byte)0x30, (byte)0x78, (byte)0x8E, (byte)0x16,
@@ -67,6 +70,9 @@ public class Constants {
 			(byte)0x58, (byte)0x4C, (byte)0xAE, (byte)0xA7,
 		};
 	
+	/**
+	 * BIN startup code, hucky board style generated with 125blks tool
+	 */
 	public static final byte hucky152Blks[] = {
 			(byte)0x10, (byte)0x80, (byte)0x5E, (byte)0xFE, (byte)0xC3, (byte)0xC2,
 			(byte)0xCD, (byte)0x38, (byte)0x30, (byte)0x48, (byte)0x55, (byte)0x43,
@@ -112,5 +118,4 @@ public class Constants {
 			(byte)0xFA, (byte)0x4C, (byte)0x00, (byte)0x04, (byte)0x00, (byte)0x00,
 			(byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
 		};
-	
 }

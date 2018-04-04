@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
@@ -24,15 +25,6 @@ public class FileDaoImplTest{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	
-	@Test
-	public void testFileTes() {
-		String fileString = "D:\\Test.tst";
-		File file = new File(fileString);
-		
-		System.out.println(file.isFile());
 	}
 	
 }

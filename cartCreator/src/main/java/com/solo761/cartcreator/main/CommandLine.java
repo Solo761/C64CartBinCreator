@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.manager.impl.CartCreatorManagerImpl;
 import com.solo761.cartcreator.business.model.BinFileTemplate;
-import com.solo761.cartcreator.business.utils.Constants;
+import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
 
 public class CommandLine {
 	
@@ -27,7 +27,7 @@ public class CommandLine {
 		
 		BinFileTemplate filePrep = new BinFileTemplate();
 		
-		filePrep.setHeaderPayload(Constants.huckyPrg2Crt);
+		filePrep.setHeaderPayload(CartCreatorByteArrays.huckyPrg2Crt);
 		
 		try {
 			filePrep.setPrgPayload(cartCreatorManager.loadFile(prgFile));

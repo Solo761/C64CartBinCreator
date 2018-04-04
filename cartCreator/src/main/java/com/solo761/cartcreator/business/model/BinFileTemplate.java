@@ -16,6 +16,14 @@ public class BinFileTemplate {
 		return b.array();
 	}
 	
+	public byte[] getCRTTemp() {
+		ByteBuffer b = ByteBuffer.allocate(headerPayload.length + prgSize.length + prgPayload.length);
+		b.put(headerPayload);
+		b.put(prgSize);
+		b.put(prgPayload);
+		return b.array();
+	}
+	
 	public byte[] getHeaderPayload() {
 		return headerPayload;
 	}
