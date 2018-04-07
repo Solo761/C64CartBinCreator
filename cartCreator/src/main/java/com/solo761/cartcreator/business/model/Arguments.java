@@ -6,6 +6,7 @@ public class Arguments {
 	private CartTypes cartType;
 	private String outputFile;
 	private boolean makeCRT;
+	private boolean makeBin;
 	private boolean help;
 	private String errors;
 	
@@ -33,6 +34,12 @@ public class Arguments {
 	public void setMakeCRT(boolean makeCRT) {
 		this.makeCRT = makeCRT;
 	}
+	public boolean isMakeBin() {
+		return makeBin;
+	}
+	public void setMakeBin(boolean makeBin) {
+		this.makeBin = makeBin;
+	}
 	public boolean isHelp() {
 		return help;
 	}
@@ -45,5 +52,5 @@ public class Arguments {
 	public void setErrors(String errors) {
 		this.errors = errors;
 	}
-
+	
 }

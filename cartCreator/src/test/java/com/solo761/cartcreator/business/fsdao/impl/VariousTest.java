@@ -17,7 +17,7 @@ public class VariousTest {
 	
 	@Test
 	public void testPathRegexTest() {
-		String pathRegex = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9._-]+)+\\\\?";
+		String pathRegex = "([a-zA-Z]:)?(\\\\[ a-zA-Z0-9._-]+)+\\\\?";
 		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit31.0.0.0SetupA.exe";
 		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit 3 1.0.0.0 Setup A.exe";
 		String fileString = "D:\\Electronics\\_Tools\\_Picki t3\\1.0.0\\ICkit31.0.0.0SetupA.exe";
@@ -69,6 +69,31 @@ public class VariousTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void fileNameTest() {
+		String fileString = "T:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit31.0.0.0SetupA.exe";
+		File filePath = new File (fileString);
+		String fileName = filePath.getName().substring(0, filePath.getName().lastIndexOf("."));
+		System.out.println(fileName);
+		
+		fileName = "";
+		
+		for (int x = 0; x < 10; x++) {
+			fileName += ".";
+			System.out.println(fileName + " = " + fileName.matches("(\\.)\\1{2,}"));
+		}
+	}
+	
+	@Test
+	public void pathTest() {
+		String path = ".\\bla.tst";
+		File filePath = new File(path);
+		System.out.println("String: " + path);
+		System.out.println("Parent: " + filePath.getParent());
+		System.out.println("Path: " + filePath.getPath());
+		System.out.println("Name: " + filePath.getName());
 	}
 	
 }

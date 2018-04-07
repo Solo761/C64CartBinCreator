@@ -68,27 +68,31 @@ public class CartCreatorUtils {
 	public static void printHelp() {
 		String help = "Parameters:\r\n" + 
 				"  -i <input file>		prg file to convert\r\n" + 
-				"  -t <cartidge type>		to which cartridge type to convert\r\n" + 
+				"  -t <cartidge type>		to which cartridge type to convert\r\n" +
+				"\tCartridge types:\r\n" + 
+//				"\t  h				Hucky 64kB\r\n" + 
+				"\t  ih				inverted Hucky 64kB\r\n" + 
+				"\t  md				MagicDesk 64kB\r\n" + 
+//				"\t  16				16kB cartridge\r\n" + 
+//				"\t  8				8kB cartridge\r\n" + 
+				"\r\n" + 
+				"Semioptional (you need at least one of them):\r\n" + 
+				"  -c				convert to emulation cartridge format (CRT)\r\n" +
+				"  -b				convert to bin file for burning to (E)EPROM\r\n" +
 				"\r\n" + 
 				"Optional:\r\n" + 
 				"  -o <output file>		output file to save converted file to, if it differs from input file\r\n" + 
 				"  -h				this help\r\n" + 
-				"  -c				convert to emulation cartridge format (CRT)\r\n" + 
-				"\r\n" + 
-				"Cartridge types:\r\n" + 
-//				"  h				Hucky 64kB\r\n" + 
-				"  ih				inverted Hucky 64kB\r\n" + 
-				"  md				MagicDesk 64kB\r\n" + 
-//				"  16				16kB cartridge\r\n" + 
-//				"  8				8kB cartridge\r\n" + 
 				"\r\n" + 
 				"Example:\r\n" + 
 				"\r\n" + 
 				"Convert prg to inverted hucky bin file\r\n" + 
-				"  java -jar cartConv.jar -i BubbleBobble.prg -t ih\r\n" + 
+				"  java -jar cartConv.jar -i BubbleBobble.prg -t ih -b\r\n" + 
 				"\r\n" + 
-				"Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice)\r\n" + 
-				"  java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md";
+				"Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice) and bin file\r\n" + 
+				"  java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md -c -b\r\n" + 
+				"\r\n" +
+				"FYI: Order of parameters is not important.\r\n";
 		
 		System.out.println( System.lineSeparator() + help );
 	}
