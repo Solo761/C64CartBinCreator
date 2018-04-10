@@ -3,8 +3,9 @@ package com.solo761.cartcreator.main;
 import com.solo761.cartcreator.business.model.Arguments;
 import com.solo761.cartcreator.business.utils.CartCreatorArgumentParser;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+import com.solo761.cartcreator.view.controller.StageController;
 
-public class Main {
+public class Main{
 	
 	//private static final Logger	LOGGER	= LoggerFactory.getLogger( Main.class );
 	private static CommandLine commandLine = new CommandLine();
@@ -13,6 +14,7 @@ public class Main {
 		
 		Arguments arguments = null;
 		
+		// if there are command line arguments parse them and run command Line  
 		if ( args.length > 0 ) {
 			arguments = CartCreatorArgumentParser.parseArguments(args);
 			if ( arguments.isHelp() ) {
@@ -28,14 +30,12 @@ public class Main {
 									"Try -h for help" );
 				return;
 			}
+			commandLine.commandLine(arguments);
 		}
+		// else start GUI
 		else {
-			System.out.println( "No parameters entered" );
-			return;
+			javafx.application.Application.launch(StageController.class, (java.lang.String[])null);
 		}
-			
-		commandLine.commandLine(arguments);
-		
 	}
 
 }
