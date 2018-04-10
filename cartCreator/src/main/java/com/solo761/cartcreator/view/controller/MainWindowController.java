@@ -17,9 +17,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -76,11 +76,13 @@ public class MainWindowController implements Initializable {
 				List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnAddFile.getScene().getWindow());
 				
 				if (selectedFiles != null && !selectedFiles.isEmpty())  {
-					System.out.println(selectedFiles);
-					
 					for (File file : selectedFiles) {
-						tableViewMain.getItems().add( new FileData(file.getAbsolutePath(), file.getName()) );
-//						tableViewMain.getItems().add( file.getAbsolutePath() );
+						FileData newFile = new FileData(file.getAbsolutePath(), file.getName());
+						if ( !tableViewMain.getItems().contains(newFile) ) {
+							tableViewMain.getItems().add( newFile );
+						}
+						else
+							System.out.println( "File \"" + newFile.getPath() + "\" already added" );
 					}
 					
 				}
@@ -92,10 +94,12 @@ public class MainWindowController implements Initializable {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				FileData selectedFile = tableViewMain.getSelectionModel().getSelectedItem();
-				System.out.println("Removing " + selectedFile.getFileName());
-				tableViewMain.getItems().remove(selectedFile);
-				//getFolder();
+				if (tableViewMain.getSelectionModel().getSelectedItems().size() > 0) {
+					ObservableList<FileData> selectedList = tableViewMain.getSelectionModel().getSelectedItems();
+					for (FileData file : selectedList)
+						tableViewMain.getItems().remove(file);
+					tableViewMain.getSelectionModel().clearSelection();
+				}
 			}
 		});
         
@@ -113,6 +117,7 @@ public class MainWindowController implements Initializable {
 
 	private void initTableSource() {
 		tableViewMain.setEditable(false);
+		tableViewMain.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		tableColumnFile.setCellValueFactory( new PropertyValueFactory<FileData, String>( "fileName" ) );
 		tableColumnFile.setCellFactory(

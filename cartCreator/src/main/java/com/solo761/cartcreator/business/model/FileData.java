@@ -11,6 +11,16 @@ public class FileData {
 		this.path = path;
 		this.fileName = fileName;
 	}
+	
+	@Override
+	public boolean equals(Object object){
+		
+		if (object != null && object instanceof FileData) {
+			if ( path.equals( ((FileData) object).getPath()) )
+				return true;
+		}
+		return false;
+	}
 
 	public String getPath() {
 		return path;
