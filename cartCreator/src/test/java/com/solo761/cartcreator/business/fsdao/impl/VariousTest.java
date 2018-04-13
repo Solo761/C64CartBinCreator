@@ -31,9 +31,10 @@ public class VariousTest {
 	
 	@Test
 	public void testPathNioTest() {
-		String fileString = "T:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit31.0.0.0SetupA.exe";
+		//String fileString = "T:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit31.0.0.0SetupA.exe";
 		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit 3 1.0.0.0 Setup A.exe";
 		//String fileString = "D:\\Electronics\\_Tools\\_Picki t3\\1.0.0\\ICkit31.0.0.0SetupA.exe";
+		String fileString = "blas";
 		
 		try{
 		    Paths.get(new File(fileString).toURI());
@@ -42,6 +43,22 @@ public class VariousTest {
 		}
 		System.out.println("OK path");
 		
+	}
+	
+	@Test
+	public void testPathCustomTest() {
+		String fileString = "T:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit31.0.0.0SetupA.exe";
+		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit 3 1.0.0.0 Setup A.exe";
+		//String fileString = "D:\\Electronics\\_Tools\\_Picki t3\\1.0.0\\ICkit31.0.0.0SetupA.exe";
+		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\";
+		//String fileString = "blas";
+		
+	    File path = new File(fileString);
+	    if (path.isDirectory())
+	    	System.out.println("OK path");
+	    else
+			System.out.println("Wrong path");
+
 	}
 	
 	@Test

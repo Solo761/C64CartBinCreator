@@ -6,30 +6,34 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.solo761.cartcreator.view.controller.MainWindowController">
+<BorderPane maxHeight="-Infinity" maxWidth="480.0" minHeight="640.0" minWidth="480.0" prefHeight="640.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.solo761.cartcreator.view.controller.MainWindowController">
    <top>
-      <AnchorPane prefHeight="120.0" prefWidth="480.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="120.0" prefHeight="120.0" prefWidth="480.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnAddFile" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Add File" />
-            <Button fx:id="btnRemoveFile" layoutX="14.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Remove" />
-            <ChoiceBox fx:id="choiceBoxCartType" layoutX="316.0" layoutY="14.0" prefWidth="150.0" />
-            <CheckBox fx:id="checkBoxCreateBin" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" selected="true" text="Create Bin" />
-            <CheckBox fx:id="checkBoxCreateCRT" layoutX="107.0" layoutY="52.0" mnemonicParsing="false" text="Create CRT" />
-            <Button fx:id="btnStart" layoutX="406.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Start" />
-            <Label layoutX="228.0" layoutY="18.0" text="Cartridge Type:" />
+            <Button fx:id="btnAddFile" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Add File" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <Button fx:id="btnRemoveFile" layoutX="90.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Remove" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="14.0" />
+            <ChoiceBox fx:id="choiceBoxCartType" layoutX="316.0" layoutY="14.0" prefWidth="150.0" AnchorPane.leftAnchor="316.0" AnchorPane.topAnchor="14.0" />
+            <CheckBox fx:id="checkBoxCreateBin" layoutX="14.0" layoutY="85.0" mnemonicParsing="false" selected="true" text="Create Bin" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="85.0" />
+            <CheckBox fx:id="checkBoxCreateCRT" layoutX="107.0" layoutY="85.0" mnemonicParsing="false" text="Create CRT" AnchorPane.leftAnchor="107.0" AnchorPane.topAnchor="85.0" />
+            <Button fx:id="btnStart" layoutX="406.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Start" AnchorPane.leftAnchor="406.0" AnchorPane.topAnchor="81.0" />
+            <Label layoutX="228.0" layoutY="18.0" text="Cartridge Type:" AnchorPane.leftAnchor="228.0" AnchorPane.topAnchor="18.0" />
+            <TextField fx:id="textFieldOutput" layoutX="90.0" layoutY="48.0" prefHeight="25.0" prefWidth="376.0" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="48.0" />
+            <Button fx:id="btnBrowseOutput" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Browse" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="48.0" />
          </children>
       </AnchorPane>
    </top>
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="520.0" prefWidth="480.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tableViewMain" prefHeight="520.0" prefWidth="480.0">
+            <TableView fx:id="tableViewMain" prefHeight="520.0" prefWidth="480.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <columns>
-                  <TableColumn fx:id="tableColumnFile" prefWidth="480.0" text="File" />
-               </columns></TableView>
+                  <TableColumn fx:id="tableColumnFile" maxWidth="1.7976931348623157E308" prefWidth="480.0" text="File" />
+               </columns>
+            </TableView>
          </children>
       </AnchorPane>
    </center>

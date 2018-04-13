@@ -1,12 +1,18 @@
 package com.solo761.cartcreator.view.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.solo761.cartcreator.business.manager.CartCreatorManager;
+import com.solo761.cartcreator.business.manager.impl.CartCreatorManagerImpl;
+import com.solo761.cartcreator.business.model.Arguments;
+import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FileData;
+import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +20,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -21,12 +29,16 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class MainWindowController implements Initializable {
+	
+	private static CartCreatorManager cartCreatorManager = new CartCreatorManagerImpl();
 
 	@FXML
     private Button btnAddFile;
@@ -35,7 +47,7 @@ public class MainWindowController implements Initializable {
     private Button btnRemoveFile;
 
     @FXML
-    private ChoiceBox<?> choiceBoxCartType;
+    private ChoiceBox<CartTypes> choiceBoxCartType;
 
     @FXML
     private CheckBox checkBoxCreateBin;
@@ -45,6 +57,12 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private Button btnStart;
+    
+    @FXML
+    private TextField textFieldOutput;
+
+    @FXML
+    private Button btnBrowseOutput;
 
     @FXML
     private TableView<FileData> tableViewMain;
@@ -60,10 +78,14 @@ public class MainWindowController implements Initializable {
         assert checkBoxCreateBin != null : "fx:id=\"checkBoxCreateBin\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert checkBoxCreateCRT != null : "fx:id=\"checkBoxCreateCRT\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert btnStart != null : "fx:id=\"btnStart\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert textFieldOutput != null : "fx:id=\"textFieldOutput\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert btnBrowseOutput != null : "fx:id=\"btnBrowseOutput\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert tableViewMain != null : "fx:id=\"tableViewMain\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert tableColumnFile != null : "fx:id=\"tableColumnFile\" was not injected: check your FXML file 'MainWindow.fxml'.";
         
         initTableSource();
+        
+        fillDropDownTypes();
         
         btnAddFile.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -103,14 +125,110 @@ public class MainWindowController implements Initializable {
 			}
 		});
         
+        btnBrowseOutput.setOnAction(new EventHandler<ActionEvent>() {
+        	
+			@Override
+			public void handle(ActionEvent event) {
+				DirectoryChooser dirChooser = new DirectoryChooser();
+				dirChooser.setTitle("Choose output folder");
+				File output = dirChooser.showDialog(btnBrowseOutput.getScene().getWindow());
+				
+				if (output != null)
+					textFieldOutput.setText(output.getAbsolutePath());
+				
+			}
+        });
+        
         btnStart.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Start");
-				//getFolder();
+				if ( "".equals(textFieldOutput.getText().trim()) ) {
+					
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Output path missing");
+					alert.setHeaderText(null);
+					alert.setContentText("Please select output folder");
+					alert.showAndWait();
+					return;
+				}
+				else if ( !CartCreatorUtils.isPath( textFieldOutput.getText().trim() ) ) {
+					if ( !CartCreatorUtils.makeDir( textFieldOutput.getText().trim() ) ) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Output path wrong");
+						alert.setHeaderText(null);
+						alert.setContentText("Unable to create output folder");
+						alert.showAndWait();
+						return;
+					}
+				}
+				
+				textFieldOutput.setText( new File(textFieldOutput.getText().trim()).getAbsolutePath() );
+				
+				if ( !(tableViewMain.getItems().size() > 0) ) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Nothing to do");
+					alert.setHeaderText(null);
+					alert.setContentText("You must add some prg files to the list");
+					alert.showAndWait();
+					return;
+				}
+				
+				// ovo preraditi da može biti ista logika i za command line i za ovo
+				// npr. modificirati argumente pa da se sve obradi kroz to 
+				
+				for ( FileData fileData : tableViewMain.getItems() ) {
+					byte[] prg = null; 
+					
+					try {
+						prg = cartCreatorManager.loadFile( new File(fileData.getPath()) );
+					} catch (IOException e) {
+						System.out.println("Error reading file: " + fileData.getFileName());
+						System.out.println( e.getMessage() );
+					}
+					
+					try {
+						if (checkBoxCreateBin.isSelected()) {
+							cartCreatorManager.saveFile(
+									cartCreatorManager.createBinFile(
+											choiceBoxCartType.getSelectionModel().getSelectedItem(),
+											prg),
+									new File( textFieldOutput.getText() + "\\" + fileData.getFileName().substring( 0, fileData.getFileName().lastIndexOf(".") ) + ".bin" ));
+						}
+						if (checkBoxCreateCRT.isSelected()) {
+							cartCreatorManager.saveFile(
+									cartCreatorManager.createCRTFile(
+											choiceBoxCartType.getSelectionModel().getSelectedItem(),
+											prg),
+									new File( textFieldOutput.getText() + "\\" + fileData.getFileName().substring( 0, fileData.getFileName().lastIndexOf(".") ) + ".crt" ));							
+						}
+					} catch (IOException e) {
+						System.out.println("Error saving file: " + fileData.getFileName());
+						System.out.println( e.getMessage() );
+					}
+					
+				}
+				
 			}
 		});
+        
+        checkBoxCreateBin.setOnAction(new EventHandler<ActionEvent>() {
+        	
+			@Override
+			public void handle(ActionEvent event) {
+				if (!checkBoxCreateBin.isSelected())
+					checkBoxCreateCRT.setSelected(true); 
+			}
+        });
+        
+        checkBoxCreateCRT.setOnAction(new EventHandler<ActionEvent>() {
+        	
+			@Override
+			public void handle(ActionEvent event) {
+				if (!checkBoxCreateCRT.isSelected())
+					checkBoxCreateBin.setSelected(true); 
+			}
+        });
 
 
 	}
@@ -144,6 +262,11 @@ public class MainWindowController implements Initializable {
 		ObservableList<FileData> observableFileList = FXCollections.observableArrayList(fileList);
 		tableViewMain.setItems(observableFileList);
 		
+	}
+	
+	private void fillDropDownTypes() {
+		choiceBoxCartType.getItems().setAll(CartTypes.INVERTEDHUCKY, CartTypes.MAGICDESK);
+		choiceBoxCartType.getSelectionModel().select(0);
 	}
 
 }

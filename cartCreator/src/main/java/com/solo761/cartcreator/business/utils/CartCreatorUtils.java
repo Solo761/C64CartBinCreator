@@ -9,21 +9,53 @@ public class CartCreatorUtils {
 	
 	
 	/**
+	 * *** Turned out not to be good enough as it returns true for strings like "3432jklh32"<br>
+	 * *** which is technically ok, it can be folder name, but not usefull for path validation<br>
+	 * <br>
 	 * Test input string if it conforms to<br>
 	 * rules for file and folder naming on operating<br>
 	 * system it's run on. Should work on Windows and *nix<br>
 	 * based OS's.<br>
+	 * <br>
 	 * Returns <b>true</b> if path is OK
 	 * @param path - String to be tested
 	 * @return <b>boolean</b>
 	 */
-	public static boolean pathTest( String path ) {
+	public static boolean isPathNio( String path ) {
 		try{
 		    Paths.get( new File( path ).toURI() );
 		}catch ( InvalidPathException err ){
 			return false;
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * Tests if string path is existing folder on the file system<br>
+	 * <br>
+	 * Returns <b>true</b> if it's existing folder
+	 * @param path - String to be tested
+	 * @return <b>boolean</b>
+	 */
+	public static boolean isPath( String path ) {
+		File testPath = new File( path );
+		
+		if (testPath.isDirectory())
+			return true;
+		return false;
+	}
+	
+	
+	/**
+	 * Tries to create folder from path in string, returns true if successful<br>
+	 * @param path - String to be created as folder
+	 * @return <b>boolean</b>
+	 */
+	public static boolean makeDir( String path ) {
+		File testPath = new File( path );
+		
+		return testPath.mkdir();
 	}
 	
 	/**

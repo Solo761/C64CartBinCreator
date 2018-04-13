@@ -50,7 +50,7 @@ public class CartCreatorArgumentParser {
 			// check for output command and matching path
 			if ( "-o".equals(args[x].toLowerCase()) ) {
 				if ( (x + 1) < args.length ) {
-					if ( !CartCreatorUtils.pathTest( args[x + 1] ) )
+					if ( !CartCreatorUtils.isPathNio( args[x + 1] ) )
 						errors.append( "Output parameter is not correct file path" + System.lineSeparator() );
 					else 
 						arguments.setOutputFile( args[x + 1] );
