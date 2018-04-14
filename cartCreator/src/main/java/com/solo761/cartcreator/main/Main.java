@@ -1,7 +1,7 @@
 package com.solo761.cartcreator.main;
 
+import com.solo761.cartcreator.business.logic.CmdArgsParser;
 import com.solo761.cartcreator.business.model.Arguments;
-import com.solo761.cartcreator.business.utils.CartCreatorArgumentParser;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 import com.solo761.cartcreator.view.controller.StageController;
 
@@ -9,6 +9,7 @@ public class Main{
 	
 	//private static final Logger	LOGGER	= LoggerFactory.getLogger( Main.class );
 	private static CommandLine commandLine = new CommandLine();
+	private static CmdArgsParser cmdArgsParser = new CmdArgsParser();
 
 	public static void main( String[] args ) {
 		
@@ -16,7 +17,7 @@ public class Main{
 		
 		// if there are command line arguments parse them and run command Line  
 		if ( args.length > 0 ) {
-			arguments = CartCreatorArgumentParser.parseArguments(args);
+			arguments = cmdArgsParser.parseArguments(args);
 			if ( arguments.isHelp() ) {
 				CartCreatorUtils.printHelp();
 				return;
@@ -34,7 +35,7 @@ public class Main{
 		}
 		// else start GUI
 		else {
-			javafx.application.Application.launch(StageController.class, (java.lang.String[])null);
+			javafx.application.Application.launch( StageController.class, (java.lang.String[]) null );
 		}
 	}
 

@@ -3,9 +3,9 @@ package com.solo761.cartcreator.business.manager.impl;
 import java.io.File;
 import java.io.IOException;
 
-import com.solo761.cartcreator.business.CRTgenerator.CRTGenerator;
 import com.solo761.cartcreator.business.fsdao.FileDao;
 import com.solo761.cartcreator.business.fsdao.impl.FileDaoImpl;
+import com.solo761.cartcreator.business.logic.CRTGenerator;
 import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.model.BinFileTemplate;
 import com.solo761.cartcreator.business.model.CartTypes;

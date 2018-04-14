@@ -2,9 +2,6 @@ package com.solo761.cartcreator.business.fsdao.impl;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 

@@ -5,6 +5,8 @@ public class Arguments {
 	private String inputFile;
 	private CartTypes cartType;
 	private String outputFile;
+	private String crtExtension = ".crt";
+	private String binExtension = ".bin";
 	private boolean makeCRT;
 	private boolean makeBin;
 	private boolean help;
@@ -27,6 +29,18 @@ public class Arguments {
 	}
 	public void setOutputFile(String outputFile) {
 		this.outputFile = outputFile;
+	}
+	public String getCrtExtension() {
+		return crtExtension;
+	}
+	public void setCrtExtension(String crtExtension) {
+		this.crtExtension = crtExtension;
+	}
+	public String getBinExtension() {
+		return binExtension;
+	}
+	public void setBinExtension(String binExtension) {
+		this.binExtension = binExtension;
 	}
 	public boolean isMakeCRT() {
 		return makeCRT;

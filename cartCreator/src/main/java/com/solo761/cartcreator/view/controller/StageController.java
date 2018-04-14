@@ -22,7 +22,7 @@ public class StageController extends Application {
 			stage.setMinHeight(680.0);
 			
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/com/solo761/cartcreator/view/fxml/MainWindow.fxml"));
+			loader.setLocation(ClassLoader.getSystemResource("fxml/MainWindow.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			
 			Scene scene = new Scene(rootLayout);
