@@ -17,6 +17,9 @@ public class StageController extends Application {
 			BorderPane rootLayout;
 			
 			stage.setTitle( "Cartridge Creator tool" );
+			stage.setMaxWidth(495.0);
+			stage.setMinWidth(495.0);
+			stage.setMinHeight(680.0);
 			
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/com/solo761/cartcreator/view/fxml/MainWindow.fxml"));
