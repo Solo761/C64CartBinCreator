@@ -116,10 +116,10 @@ public class VariousTest {
 	
 	@Test
 	public void arrayTest() {
-		int arrPosition = 144;
-		System.out.println( "Hucky: " + String.format("%02X ", CartCreatorByteArrays.huckyPrg2Crt[arrPosition - 1]) );
-		System.out.println( "MagicDesk: " + String.format("%02X ", CartCreatorByteArrays.magicDeskPrg2Crt[arrPosition - 1]) );
-		System.out.println( "Hucky 152Blks: " + String.format("%02X ", CartCreatorByteArrays.hucky152Blks[182 - 1]) );
+		System.out.println( "Hucky: " + String.format("%02X ", CartCreatorByteArrays.getLoaderVarA(CartTypes.HUCKY)[144 - 1]) );
+		System.out.println( "MagicDesk: " + String.format("%02X ", CartCreatorByteArrays.getLoaderVarA(CartTypes.MAGICDESK)[144 - 1]) );
+		System.out.println( "Hucky 152Blks: " + String.format("%02X ", CartCreatorByteArrays.getLoaderVarB(CartTypes.HUCKY)[182 - 1]) );
+		System.out.println( "Hucky 152Blks: " + String.format("%02X ", CartCreatorByteArrays.getLoaderVarB(CartTypes.MAGICDESK)[182 - 1]) );
 	}
 	
 }

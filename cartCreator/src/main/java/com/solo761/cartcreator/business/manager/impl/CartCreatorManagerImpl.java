@@ -61,10 +61,10 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 			
 			break;
 		case INVERTEDHUCKY:
-			filePrep.setHeaderPayload(CartCreatorByteArrays.huckyPrg2Crt);
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
 			break;
 		case MAGICDESK:
-			filePrep.setHeaderPayload(CartCreatorByteArrays.magicDeskPrg2Crt);
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
 			break;
 		case SIXTEENK:
 			
@@ -89,10 +89,10 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 			
 			break;
 		case INVERTEDHUCKY:
-			filePrep.setHeaderPayload(CartCreatorByteArrays.huckyPrg2Crt);
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
 			break;
 		case MAGICDESK:
-			filePrep.setHeaderPayload(CartCreatorByteArrays.magicDeskPrg2Crt);
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
 			break;
 		case SIXTEENK:
 			

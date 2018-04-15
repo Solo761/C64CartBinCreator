@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
  */
 public class BinFileTemplate {
 	
-	private byte[] headerPayload;
+	private byte[] loaderPayload;
 	private byte[] prgSize;
 	private byte[] prgPayload;
 	
@@ -19,7 +19,7 @@ public class BinFileTemplate {
 	 */
 	public byte[] getFinalBin() {
 		ByteBuffer b = ByteBuffer.allocate(65536);
-		b.put(headerPayload);
+		b.put(loaderPayload);
 		b.put(prgSize);
 		b.put(prgPayload);
 		return b.array();
@@ -30,32 +30,35 @@ public class BinFileTemplate {
 	 * @return <b>byte</b>
 	 */
 	public byte[] getCRTTemp() {
-		ByteBuffer b = ByteBuffer.allocate(headerPayload.length + prgSize.length + prgPayload.length);
-		b.put(headerPayload);
+		ByteBuffer b = ByteBuffer.allocate(loaderPayload.length + prgSize.length + prgPayload.length);
+		b.put(loaderPayload);
 		b.put(prgSize);
 		b.put(prgPayload);
 		return b.array();
 	}
-	
-	public byte[] getHeaderPayload() {
-		return headerPayload;
+
+	public byte[] getLoaderPayload() {
+		return loaderPayload;
 	}
-	public void setHeaderPayload(byte[] headerPayload) {
-		this.headerPayload = headerPayload;
+
+	public void setLoaderPayload(byte[] loaderPayload) {
+		this.loaderPayload = loaderPayload;
 	}
+
 	public byte[] getPrgSize() {
 		return prgSize;
 	}
+
 	public void setPrgSize(byte[] prgSize) {
 		this.prgSize = prgSize;
 	}
+
 	public byte[] getPrgPayload() {
 		return prgPayload;
 	}
+
 	public void setPrgPayload(byte[] prgPayload) {
 		this.prgPayload = prgPayload;
 	}
 	
-	
-
 }

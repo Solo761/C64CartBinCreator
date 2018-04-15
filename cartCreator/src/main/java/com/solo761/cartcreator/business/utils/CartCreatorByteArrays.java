@@ -1,17 +1,19 @@
 package com.solo761.cartcreator.business.utils;
 
+import com.solo761.cartcreator.business.model.CartTypes;
+
 /**
  * Bin headers (loaders) for various cartridges 
+ * uses loader code from http://www.frank-buss.de/c64/prg2crt/index.html
  *
  */
 public class CartCreatorByteArrays {
 	
-	/**
-	 * BIN startup code from Frank Buss' python prg2crt generator,<br>
-	 * hucky board style, only difference from MagicDesk is byte ("08") on $008F address<br>
-	 * (or $808F when viewed from C64 side), in array it's on position 143
+	/** prg2crt loader
+	 * Setting array field 143 to $08 makes it hucky compatible loader<br>
+	 * Setting array field 143 to $80 makes it Magic Desk compatible loader
 	 */
-	public static final byte[] huckyPrg2Crt = {
+	private static final byte[] loaderVarA = {
 			(byte)0x09, (byte)0x80, (byte)0x09, (byte)0x80, (byte)0xC3, (byte)0xC2,
 			(byte)0xCD, (byte)0x38, (byte)0x30, (byte)0x78, (byte)0x8E, (byte)0x16,
 			(byte)0xD0, (byte)0x20, (byte)0xA3, (byte)0xFD, (byte)0x20, (byte)0x50,
@@ -35,52 +37,16 @@ public class CartCreatorByteArrays {
 			(byte)0x57, (byte)0x8D, (byte)0x00, (byte)0xDE, (byte)0xE6, (byte)0x2D,
 			(byte)0xD0, (byte)0x02, (byte)0xE6, (byte)0x2E, (byte)0xC6, (byte)0x58,
 			(byte)0xD0, (byte)0xDB, (byte)0xC6, (byte)0x59, (byte)0xA5, (byte)0x59,
-			(byte)0xC9, (byte)0xFF, (byte)0xD0, (byte)0xD3, (byte)0xA9, (byte)0x08,
+			(byte)0xC9, (byte)0xFF, (byte)0xD0, (byte)0xD3, (byte)0xA9, (byte)0x00,
 			(byte)0x8D, (byte)0x00, (byte)0xDE, (byte)0x20, (byte)0x63, (byte)0xA6,
 			(byte)0x58, (byte)0x4C, (byte)0xAE, (byte)0xA7
 		};
 	
-	// ovo je isti header kao gore samo je komanda za "prebacivanje" banke od magicDesk-a
-	// (tj. byte 008F - 08)
-	/**
-	 * BIN startup code from Frank Buss' python prg2crt generator,<br>
-	 * Magic Desk board style, only difference from hucky is byte ("80") on $008F address<br>
-	 * (or $808F when viewed from C64 side), in array it's on position 143
+	/** 152Blks loader
+	 * Setting array field 181 to $08 makes it hucky compatible loader<br>
+	 * Setting array field 181 to $80 makes it Magic Desk compatible loader
 	 */
-	public static final byte magicDeskPrg2Crt[] = {
-			(byte)0x09, (byte)0x80, (byte)0x09, (byte)0x80, (byte)0xC3, (byte)0xC2,
-			(byte)0xCD, (byte)0x38, (byte)0x30, (byte)0x78, (byte)0x8E, (byte)0x16,
-			(byte)0xD0, (byte)0x20, (byte)0xA3, (byte)0xFD, (byte)0x20, (byte)0x50,
-			(byte)0xFD, (byte)0xA9, (byte)0xA0, (byte)0x8D, (byte)0x84, (byte)0x02,
-			(byte)0x20, (byte)0x15, (byte)0xFD, (byte)0x20, (byte)0x5B, (byte)0xFF,
-			(byte)0x58, (byte)0x20, (byte)0x53, (byte)0xE4, (byte)0x20, (byte)0xBF,
-			(byte)0xE3, (byte)0x20, (byte)0x22, (byte)0xE4, (byte)0xA2, (byte)0xFB,
-			(byte)0x9A, (byte)0xA9, (byte)0x00, (byte)0x85, (byte)0x57, (byte)0xAD,
-			(byte)0x9A, (byte)0x80, (byte)0x85, (byte)0x58, (byte)0xAD, (byte)0x9B,
-			(byte)0x80, (byte)0x85, (byte)0x59, (byte)0xAD, (byte)0x9C, (byte)0x80,
-			(byte)0x85, (byte)0x2D, (byte)0xAD, (byte)0x9D, (byte)0x80, (byte)0x85,
-			(byte)0x2E, (byte)0xA9, (byte)0x9E, (byte)0x85, (byte)0x5A, (byte)0xA9,
-			(byte)0x80, (byte)0x85, (byte)0x5B, (byte)0xA2, (byte)0x00, (byte)0xBD,
-			(byte)0x59, (byte)0x80, (byte)0x9D, (byte)0x00, (byte)0x06, (byte)0xE8,
-			(byte)0xD0, (byte)0xF7, (byte)0x4C, (byte)0x00, (byte)0x06, (byte)0x78,
-			(byte)0xA2, (byte)0x00, (byte)0xA5, (byte)0x57, (byte)0x8D, (byte)0x00,
-			(byte)0xDE, (byte)0xA1, (byte)0x5A, (byte)0x81, (byte)0x2D, (byte)0xE6,
-			(byte)0x5A, (byte)0xD0, (byte)0x13, (byte)0xE6, (byte)0x5B, (byte)0xA5,
-			(byte)0x5B, (byte)0xC9, (byte)0xA0, (byte)0xD0, (byte)0x0B, (byte)0xA9,
-			(byte)0x80, (byte)0x85, (byte)0x5B, (byte)0xE6, (byte)0x57, (byte)0xA5,
-			(byte)0x57, (byte)0x8D, (byte)0x00, (byte)0xDE, (byte)0xE6, (byte)0x2D,
-			(byte)0xD0, (byte)0x02, (byte)0xE6, (byte)0x2E, (byte)0xC6, (byte)0x58,
-			(byte)0xD0, (byte)0xDB, (byte)0xC6, (byte)0x59, (byte)0xA5, (byte)0x59,
-			(byte)0xC9, (byte)0xFF, (byte)0xD0, (byte)0xD3, (byte)0xA9, (byte)0x80,
-			(byte)0x8D, (byte)0x00, (byte)0xDE, (byte)0x20, (byte)0x63, (byte)0xA6,
-			(byte)0x58, (byte)0x4C, (byte)0xAE, (byte)0xA7,
-		};
-	
-	/**
-	 * BIN startup code, hucky board style, generated with 152blks tool, it can be adapted as<br>
-	 * Magic Desk loader if byte at address $00B5 is changed to "80" , in array it's on position 181 
-	 */
-	public static final byte hucky152Blks[] = {
+	private static final byte[] loaderVarB = {
 			(byte)0x10, (byte)0x80, (byte)0x5E, (byte)0xFE, (byte)0xC3, (byte)0xC2,
 			(byte)0xCD, (byte)0x38, (byte)0x30, (byte)0x48, (byte)0x55, (byte)0x43,
 			(byte)0x4B, (byte)0x59, (byte)0x00, (byte)0x00, (byte)0x8E, (byte)0x16,
@@ -111,7 +77,7 @@ public class CartCreatorByteArrays {
 			(byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA,
 			(byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA,
 			(byte)0xEA, (byte)0xEA, (byte)0x58, (byte)0xEA, (byte)0xEA, (byte)0xEA,
-			(byte)0xA9, (byte)0x08, (byte)0x8D, (byte)0x00, (byte)0xDE, (byte)0xEA,
+			(byte)0xA9, (byte)0x00, (byte)0x8D, (byte)0x00, (byte)0xDE, (byte)0xEA,
 			(byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA, (byte)0xEA,
 			(byte)0xA9, (byte)0xE1, (byte)0x85, (byte)0xAE, (byte)0x85, (byte)0x2D,
 			(byte)0xA9, (byte)0xBF, (byte)0x85, (byte)0xAF, (byte)0x85, (byte)0x2E,
@@ -125,4 +91,33 @@ public class CartCreatorByteArrays {
 			(byte)0xFA, (byte)0x4C, (byte)0x00, (byte)0x04, (byte)0x00, (byte)0x00,
 			(byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00
 		};
+	
+	
+	/** Returns loader variant A prepared for required cartridge type 
+	 * 
+	 * @param type - CartTypes type
+	 * @return <b>byte[]</b> - prepared loader
+	 */
+	public static byte[] getLoaderVarA(CartTypes type) {
+		byte[] loader = loaderVarA.clone();
+		if ( type == CartTypes.HUCKY || type == CartTypes.INVERTEDHUCKY )
+			loader[143] = (byte) 0x08;
+		else if ( type == CartTypes.MAGICDESK )
+			loader[143] = (byte) 0x80;
+		return loader;
+	}
+	
+	/** Returns loader variant B prepared for required cartridge type 
+	 * 
+	 * @param type - CartTypes type
+	 * @return <b>byte[]</b> - prepared loader
+	 */
+	public static byte[] getLoaderVarB(CartTypes type) {
+		byte[] loader = loaderVarB.clone();
+		if ( type == CartTypes.HUCKY || type == CartTypes.INVERTEDHUCKY )
+			loader[181] = (byte) 0x08;
+		else if ( type == CartTypes.MAGICDESK )
+			loader[181] = (byte) 0x80;
+		return loader;
+	}
 }
