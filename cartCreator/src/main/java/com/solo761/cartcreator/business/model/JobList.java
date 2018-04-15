@@ -1,10 +1,16 @@
 package com.solo761.cartcreator.business.model;
 
-public class Arguments {
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Object that stores all data about what needs to be done.<br>
+ *
+ */
+public class JobList {
 	
-	private String inputFile;
+	private List<FilePath> fileList = new ArrayList<FilePath>();
 	private CartTypes cartType;
-	private String outputFile;
 	private String crtExtension = ".crt";
 	private String binExtension = ".bin";
 	private boolean makeCRT;
@@ -12,23 +18,17 @@ public class Arguments {
 	private boolean help;
 	private String errors;
 	
-	public String getInputFile() {
-		return inputFile;
+	public List<FilePath> getFileList() {
+		return fileList;
 	}
-	public void setInputFile(String inputFile) {
-		this.inputFile = inputFile;
+	public void setFileList(List<FilePath> fileList) {
+		this.fileList = fileList;
 	}
 	public CartTypes getCartType() {
 		return cartType;
 	}
 	public void setCartType(CartTypes cartType) {
 		this.cartType = cartType;
-	}
-	public String getOutputFile() {
-		return outputFile;
-	}
-	public void setOutputFile(String outputFile) {
-		this.outputFile = outputFile;
 	}
 	public String getCrtExtension() {
 		return crtExtension;
@@ -66,5 +66,4 @@ public class Arguments {
 	public void setErrors(String errors) {
 		this.errors = errors;
 	}
-	
 }

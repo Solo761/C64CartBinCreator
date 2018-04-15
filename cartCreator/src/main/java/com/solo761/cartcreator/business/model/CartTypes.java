@@ -1,5 +1,9 @@
 package com.solo761.cartcreator.business.model;
 
+/**
+ * Enum for supported cart types, although currently not all are used
+ *
+ */
 public enum CartTypes {
 	
 	HUCKY("Hucky"),

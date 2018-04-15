@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.manager.impl.CartCreatorManagerImpl;
 import com.solo761.cartcreator.business.model.CartTypes;
+import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
 
 public class VariousTest {
 	
@@ -47,10 +48,10 @@ public class VariousTest {
 	
 	@Test
 	public void testPathCustomTest() {
-		String fileString = "T:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit31.0.0.0SetupA.exe";
+		//String fileString = "T:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit31.0.0.0SetupA.exe";
 		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\PICkit 3 1.0.0.0 Setup A.exe";
 		//String fileString = "D:\\Electronics\\_Tools\\_Picki t3\\1.0.0\\ICkit31.0.0.0SetupA.exe";
-		//String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\";
+		String fileString = "D:\\Electronics\\_Tools\\_Pickit3\\1.0.0\\";
 		//String fileString = "blas";
 		
 	    File path = new File(fileString);
@@ -111,6 +112,14 @@ public class VariousTest {
 		System.out.println("Parent: " + filePath.getParent());
 		System.out.println("Path: " + filePath.getPath());
 		System.out.println("Name: " + filePath.getName());
+	}
+	
+	@Test
+	public void arrayTest() {
+		int arrPosition = 144;
+		System.out.println( "Hucky: " + String.format("%02X ", CartCreatorByteArrays.huckyPrg2Crt[arrPosition - 1]) );
+		System.out.println( "MagicDesk: " + String.format("%02X ", CartCreatorByteArrays.magicDeskPrg2Crt[arrPosition - 1]) );
+		System.out.println( "Hucky 152Blks: " + String.format("%02X ", CartCreatorByteArrays.hucky152Blks[182 - 1]) );
 	}
 	
 }

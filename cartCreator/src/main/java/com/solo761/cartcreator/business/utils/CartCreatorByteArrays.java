@@ -1,11 +1,15 @@
 package com.solo761.cartcreator.business.utils;
 
+/**
+ * Bin headers (loaders) for various cartridges 
+ *
+ */
 public class CartCreatorByteArrays {
 	
-	// zapravo alternativni hucky, iz prg2crt.py-a header ga ne čini invertiranim nego bin konfiguracija
-	// jedino je obavezno da ide na hucky PCB (byte 008F - 08)
 	/**
-	 * BIN startup code, hucky board style
+	 * BIN startup code from Frank Buss' python prg2crt generator,<br>
+	 * hucky board style, only difference from MagicDesk is byte ("08") on $008F address<br>
+	 * (or $808F when viewed from C64 side), in array it's on position 143
 	 */
 	public static final byte[] huckyPrg2Crt = {
 			(byte)0x09, (byte)0x80, (byte)0x09, (byte)0x80, (byte)0xC3, (byte)0xC2,
@@ -39,7 +43,9 @@ public class CartCreatorByteArrays {
 	// ovo je isti header kao gore samo je komanda za "prebacivanje" banke od magicDesk-a
 	// (tj. byte 008F - 08)
 	/**
-	 * BIN startup code, MagicDesk board style
+	 * BIN startup code from Frank Buss' python prg2crt generator,<br>
+	 * Magic Desk board style, only difference from hucky is byte ("80") on $008F address<br>
+	 * (or $808F when viewed from C64 side), in array it's on position 143
 	 */
 	public static final byte magicDeskPrg2Crt[] = {
 			(byte)0x09, (byte)0x80, (byte)0x09, (byte)0x80, (byte)0xC3, (byte)0xC2,
@@ -71,7 +77,8 @@ public class CartCreatorByteArrays {
 		};
 	
 	/**
-	 * BIN startup code, hucky board style generated with 125blks tool
+	 * BIN startup code, hucky board style, generated with 152blks tool, it can be adapted as<br>
+	 * Magic Desk loader if byte at address $00B5 is changed to "80" , in array it's on position 181 
 	 */
 	public static final byte hucky152Blks[] = {
 			(byte)0x10, (byte)0x80, (byte)0x5E, (byte)0xFE, (byte)0xC3, (byte)0xC2,

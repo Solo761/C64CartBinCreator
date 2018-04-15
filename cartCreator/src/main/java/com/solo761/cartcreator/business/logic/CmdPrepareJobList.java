@@ -2,27 +2,30 @@ package com.solo761.cartcreator.business.logic;
 
 import java.io.File;
 
-import com.solo761.cartcreator.business.model.Arguments;
+import com.solo761.cartcreator.business.model.JobList;
 import com.solo761.cartcreator.business.model.CartTypes;
+import com.solo761.cartcreator.business.model.FilePath;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 
-public class CmdArgsParser {
+public class CmdPrepareJobList {
 	
-	/** Accepts arguments from command line and parses them to<br>
-	 * Arguments object that is sent to file creator.<br>
+	/** Takes arguments from command line and prepares JobList<br>
+	 * object that is sent to JobListProcessor to create files.<br>
 	 *<br> 
 	 * Any errors are stored in "errors" String field of arguments<br>
 	 * so they all can be reported after parsing. 
 	 * @param args - String array from command line
 	 * @return <b>Arguments</b> - Arguments object with filled in parameters
 	 */
-	public Arguments parseArguments(String[] args) {
+	public JobList prepareJobList(String[] args) {
 		//List<String> argsList = Arrays.asList(args);
 		//Map<String, String> argsMap = new HashMap<String, String>();
 		
-		Arguments arguments = new Arguments();
+		JobList jobList = new JobList();
 		
 		StringBuffer errors = new StringBuffer();
+		
+		FilePath filePaths = new FilePath();
 		
 		for (int x = 0; x < args.length; x++) {
 			
@@ -34,7 +37,7 @@ public class CmdArgsParser {
 					else if ( !"prg".equals( args[x + 1].substring(args[x + 1].length() - 3, args[x + 1].length()) ) )
 						errors.append( "Input file is not prg file" + System.lineSeparator() );
 					else 
-						arguments.setInputFile( args[x + 1] );
+						filePaths.setInputFile( args[x + 1] );
 				}
 			}
 			
@@ -42,9 +45,9 @@ public class CmdArgsParser {
 			if ( "-t".equals(args[x].toLowerCase()) ) {
 				if ( (x + 1) < args.length ) {
 					if ( "ih".equals( args[x+1].toLowerCase() ) )
-						arguments.setCartType(CartTypes.INVERTEDHUCKY);
+						jobList.setCartType(CartTypes.INVERTEDHUCKY);
 					else if ( "md".equals( args[x+1].toLowerCase() ) )
-						arguments.setCartType(CartTypes.MAGICDESK);
+						jobList.setCartType(CartTypes.MAGICDESK);
 					else
 						errors.append( "Unsupported cartridge type" + System.lineSeparator() );
 				}
@@ -56,7 +59,7 @@ public class CmdArgsParser {
 					if ( !CartCreatorUtils.isPathNio( args[x + 1] ) )
 						errors.append( "Output parameter is not correct file path" + System.lineSeparator() );
 					else 
-						arguments.setOutputFile( args[x + 1] );
+						filePaths.setOutputFile( args[x + 1] );
 				}
 				else
 					errors.append( "Output parameter is missing file path" + System.lineSeparator() );
@@ -64,36 +67,36 @@ public class CmdArgsParser {
 			
 			// check if user wants CRT file
 			if ( "-c".equals(args[x].toLowerCase()) ) {
-				arguments.setMakeCRT( true );
+				jobList.setMakeCRT( true );
 			}
 			
 			// check if user wants bin file
 			if ( "-b".equals(args[x].toLowerCase()) ) {
-				arguments.setMakeBin( true );
+				jobList.setMakeBin( true );
 			}
 			
 			// check if user wanted help
 			if ( "-h".equals(args[x].toLowerCase()) ) {
-				arguments.setHelp( true );
+				jobList.setHelp( true );
 				break;
 			}
 			
 		}
 		
-		if ( arguments.getInputFile() == null )
+		if ( filePaths.getInputFile() == null )
 			errors.append( "Input file not entered" + System.lineSeparator() );
 		
-		if ( arguments.getInputFile() != null && arguments.getCartType() == null)
+		if ( filePaths.getInputFile() != null && jobList.getCartType() == null)
 			errors.append( "You must enter cart type" + System.lineSeparator() );
 		
-		if ( arguments.isMakeBin() == false && arguments.isMakeCRT() == false )
+		if ( jobList.isMakeBin() == false && jobList.isMakeCRT() == false )
 			errors.append( "You must enter at least one parameter for output file type" + System.lineSeparator() );
 		
-		arguments.setErrors( errors.toString() );
+		jobList.setErrors( errors.toString() );
 		
-		if (arguments.getErrors().trim().length() == 0 && !arguments.isHelp() ) {
+		if (jobList.getErrors().trim().length() == 0 && !jobList.isHelp() ) {
 			
-			File prgFile = new File( arguments.getInputFile() ); 
+			File prgFile = new File( filePaths.getInputFile() ); 
 			
 			String fileName = "";
 			String outPath = "";
@@ -105,10 +108,9 @@ public class CmdArgsParser {
 			// wrong that's on the user's head, but if he didn't use (no dot in file name) extension 
 			// one will be added to file name
 			// else save file in same path as input file and with same name plus new extension
-			if ( arguments.getOutputFile() != null ) {
-				File outputFilePath = new File(arguments.getOutputFile());
+			if ( filePaths.getOutputFile() != null ) {
+				File outputFilePath = new File(filePaths.getOutputFile());
 				fileName = outputFilePath.getName();
-				
 				
 				// if filename is blank that means whole output file path is output path
 				// else output path is parent of whole path
@@ -141,12 +143,12 @@ public class CmdArgsParser {
 				fileName = prgFile.getName().substring(0, prgFile.getName().length() - 4);
 			}
 			
-			arguments.setOutputFile(outPath + fileName);
+			filePaths.setOutputFile(outPath + fileName);
 		}
 		
+		jobList.getFileList().add(filePaths);
 		
-		
-		return arguments;
+		return jobList;
 	}
 
 }

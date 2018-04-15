@@ -1,5 +1,10 @@
 package com.solo761.cartcreator.business.model;
 
+/**
+ * Object for storing selected file data and displaying them in<br>
+ * main window table 
+ *
+ */
 public class FileData {
 	
 	private String path;

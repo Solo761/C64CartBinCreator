@@ -1,37 +1,36 @@
 package com.solo761.cartcreator.main;
 
-import com.solo761.cartcreator.business.logic.CmdArgsParser;
-import com.solo761.cartcreator.business.model.Arguments;
+import com.solo761.cartcreator.business.logic.CmdPrepareJobList;
+import com.solo761.cartcreator.business.logic.JobListProcessor;
+import com.solo761.cartcreator.business.model.JobList;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 import com.solo761.cartcreator.view.controller.StageController;
 
 public class Main{
 	
 	//private static final Logger	LOGGER	= LoggerFactory.getLogger( Main.class );
-	private static CommandLine commandLine = new CommandLine();
-	private static CmdArgsParser cmdArgsParser = new CmdArgsParser();
+	private static JobListProcessor jobListProcessor = new JobListProcessor();
+	private static CmdPrepareJobList cmdJobListParser = new CmdPrepareJobList();
 
 	public static void main( String[] args ) {
 		
-		Arguments arguments = null;
-		
 		// if there are command line arguments parse them and run command Line  
 		if ( args.length > 0 ) {
-			arguments = cmdArgsParser.parseArguments(args);
-			if ( arguments.isHelp() ) {
+			JobList jobList = cmdJobListParser.prepareJobList(args);
+			if ( jobList.isHelp() ) {
 				CartCreatorUtils.printHelp();
 				return;
 			}
-			if ( arguments.getErrors().length() > 0 ) {
+			if ( jobList.getErrors().length() > 0 ) {
 				System.out.println( System.lineSeparator() + 
 									System.lineSeparator() +
-									arguments.getErrors() );
+									jobList.getErrors() );
 				System.out.println( System.lineSeparator() + 
 									System.lineSeparator() + 
 									"Try -h for help" );
 				return;
 			}
-			commandLine.commandLine(arguments);
+			jobListProcessor.processJobList(jobList);
 		}
 		// else start GUI
 		else {

@@ -1,17 +1,16 @@
 package com.solo761.cartcreator.view.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.solo761.cartcreator.business.manager.CartCreatorManager;
-import com.solo761.cartcreator.business.manager.impl.CartCreatorManagerImpl;
-import com.solo761.cartcreator.business.model.Arguments;
+import com.solo761.cartcreator.business.logic.GuiPrepareJobList;
+import com.solo761.cartcreator.business.logic.JobListProcessor;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FileData;
+import com.solo761.cartcreator.business.model.JobList;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 
 import javafx.collections.FXCollections;
@@ -38,7 +37,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 public class MainWindowController implements Initializable {
 	
-	private static CartCreatorManager cartCreatorManager = new CartCreatorManagerImpl();
+	private static GuiPrepareJobList guiJobListParser = new GuiPrepareJobList();
+	private static JobListProcessor jobListProcessor = new JobListProcessor();
 
 	@FXML
     private Button btnAddFile;
@@ -91,24 +91,7 @@ public class MainWindowController implements Initializable {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				FileChooser fileChooser = new FileChooser();
-				fileChooser.setTitle( "Select prg file:" );
-				fileChooser.getExtensionFilters().addAll(new ExtensionFilter( "Prg file", "*.prg" ),
-														 new ExtensionFilter( "All files", "*.*" ));
-				List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnAddFile.getScene().getWindow());
-				
-				if (selectedFiles != null && !selectedFiles.isEmpty())  {
-					for (File file : selectedFiles) {
-						FileData newFile = new FileData(file.getAbsolutePath(), file.getName());
-						if ( !tableViewMain.getItems().contains(newFile) ) {
-							tableViewMain.getItems().add( newFile );
-						}
-						else
-							System.out.println( "File \"" + newFile.getPath() + "\" already added" );
-					}
-					
-				}
-				
+				addFiles();
 			}
 		});
         
@@ -116,12 +99,7 @@ public class MainWindowController implements Initializable {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				if (tableViewMain.getSelectionModel().getSelectedItems().size() > 0) {
-					ObservableList<FileData> selectedList = tableViewMain.getSelectionModel().getSelectedItems();
-					for (FileData file : selectedList)
-						tableViewMain.getItems().remove(file);
-					tableViewMain.getSelectionModel().clearSelection();
-				}
+				removeFile();
 			}
 		});
         
@@ -129,13 +107,7 @@ public class MainWindowController implements Initializable {
         	
 			@Override
 			public void handle(ActionEvent event) {
-				DirectoryChooser dirChooser = new DirectoryChooser();
-				dirChooser.setTitle("Choose output folder");
-				File output = dirChooser.showDialog(btnBrowseOutput.getScene().getWindow());
-				
-				if (output != null)
-					textFieldOutput.setText(output.getAbsolutePath());
-				
+				selectFolder();
 			}
         });
         
@@ -143,72 +115,7 @@ public class MainWindowController implements Initializable {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				if ( "".equals(textFieldOutput.getText().trim()) ) {
-					
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Output path missing");
-					alert.setHeaderText(null);
-					alert.setContentText("Please select output folder");
-					alert.showAndWait();
-					return;
-				}
-				else if ( !CartCreatorUtils.isPath( textFieldOutput.getText().trim() ) ) {
-					if ( !CartCreatorUtils.makeDir( textFieldOutput.getText().trim() ) ) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Output path wrong");
-						alert.setHeaderText(null);
-						alert.setContentText("Unable to create output folder");
-						alert.showAndWait();
-						return;
-					}
-				}
-				
-				textFieldOutput.setText( new File(textFieldOutput.getText().trim()).getAbsolutePath() );
-				
-				if ( !(tableViewMain.getItems().size() > 0) ) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Nothing to do");
-					alert.setHeaderText(null);
-					alert.setContentText("You must add some prg files to the list");
-					alert.showAndWait();
-					return;
-				}
-				
-				// ovo preraditi da može biti ista logika i za command line i za ovo
-				// npr. modificirati argumente pa da se sve obradi kroz to 
-				
-				for ( FileData fileData : tableViewMain.getItems() ) {
-					byte[] prg = null; 
-					
-					try {
-						prg = cartCreatorManager.loadFile( new File(fileData.getPath()) );
-					} catch (IOException e) {
-						System.out.println("Error reading file: " + fileData.getFileName());
-						System.out.println( e.getMessage() );
-					}
-					
-					try {
-						if (checkBoxCreateBin.isSelected()) {
-							cartCreatorManager.saveFile(
-									cartCreatorManager.createBinFile(
-											choiceBoxCartType.getSelectionModel().getSelectedItem(),
-											prg),
-									new File( textFieldOutput.getText() + "\\" + fileData.getFileName().substring( 0, fileData.getFileName().lastIndexOf(".") ) + ".bin" ));
-						}
-						if (checkBoxCreateCRT.isSelected()) {
-							cartCreatorManager.saveFile(
-									cartCreatorManager.createCRTFile(
-											choiceBoxCartType.getSelectionModel().getSelectedItem(),
-											prg),
-									new File( textFieldOutput.getText() + "\\" + fileData.getFileName().substring( 0, fileData.getFileName().lastIndexOf(".") ) + ".crt" ));							
-						}
-					} catch (IOException e) {
-						System.out.println("Error saving file: " + fileData.getFileName());
-						System.out.println( e.getMessage() );
-					}
-					
-				}
-				
+				generateFiles();
 			}
 		});
         
@@ -264,9 +171,106 @@ public class MainWindowController implements Initializable {
 		
 	}
 	
+	/**
+	 * Manually fill cart type dropdown menu, since not all types are implemented yet
+	 */
 	private void fillDropDownTypes() {
 		choiceBoxCartType.getItems().setAll(CartTypes.INVERTEDHUCKY, CartTypes.MAGICDESK);
 		choiceBoxCartType.getSelectionModel().select(0);
 	}
 
+	/**
+	 * Add file button code
+	 */
+	private void addFiles() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle( "Select prg file:" );
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter( "Prg file", "*.prg" ),
+												 new ExtensionFilter( "All files", "*.*" ));
+		List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnAddFile.getScene().getWindow());
+		
+		if (selectedFiles != null && !selectedFiles.isEmpty())  {
+			for (File file : selectedFiles) {
+				FileData newFile = new FileData(file.getAbsolutePath(), file.getName());
+				if ( !tableViewMain.getItems().contains(newFile) ) {
+					tableViewMain.getItems().add( newFile );
+				}
+				else
+					System.out.println( "File \"" + newFile.getPath() + "\" already added" );
+			}
+			
+		}
+	}
+	
+	/**
+	 * Remove file button code
+	 */
+	private void removeFile() {
+		if (tableViewMain.getSelectionModel().getSelectedItems().size() > 0) {
+			ObservableList<FileData> selectedList = tableViewMain.getSelectionModel().getSelectedItems();
+			for (FileData file : selectedList)
+				tableViewMain.getItems().remove(file);
+			tableViewMain.getSelectionModel().clearSelection();
+		}
+	}
+	
+	/**
+	 * Browse for folder button code
+	 */
+	private void selectFolder() {
+		DirectoryChooser dirChooser = new DirectoryChooser();
+		dirChooser.setTitle("Choose output folder");
+		File output = dirChooser.showDialog(btnBrowseOutput.getScene().getWindow());
+		
+		if (output != null)
+			textFieldOutput.setText(output.getAbsolutePath());
+		
+	}
+	
+	/**
+	 * Start conversion button code
+	 */
+	private void generateFiles() {
+		if ( "".equals(textFieldOutput.getText().trim()) ) {
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Output path missing");
+			alert.setHeaderText(null);
+			alert.setContentText("Please select output folder");
+			alert.showAndWait();
+			return;
+		}
+		else if ( !CartCreatorUtils.isPath( textFieldOutput.getText().trim() ) ) {
+			if ( !CartCreatorUtils.makeDir( textFieldOutput.getText().trim() ) ) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Output path wrong");
+				alert.setHeaderText(null);
+				alert.setContentText("Unable to create output folder");
+				alert.showAndWait();
+				return;
+			}
+		}
+		
+		textFieldOutput.setText( new File(textFieldOutput.getText().trim()).getAbsolutePath() );
+		
+		if ( !(tableViewMain.getItems().size() > 0) ) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Nothing to do");
+			alert.setHeaderText(null);
+			alert.setContentText("You must add some prg files to the list");
+			alert.showAndWait();
+			return;
+		}
+		
+		JobList jobList = guiJobListParser.prepareJobList( tableViewMain.getItems(), textFieldOutput.getText() );
+		
+		jobList.setCartType(choiceBoxCartType.getSelectionModel().getSelectedItem());
+		if (checkBoxCreateBin.isSelected())
+			jobList.setMakeBin(true);
+		if (checkBoxCreateCRT.isSelected())
+			jobList.setMakeCRT(true);
+		
+		jobListProcessor.processJobList(jobList);
+	}
+	
 }

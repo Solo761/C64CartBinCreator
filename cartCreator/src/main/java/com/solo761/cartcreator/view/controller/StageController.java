@@ -8,6 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+/**
+ * Main GUI class, this one loads MainWindow fxml file and controller
+ *
+ */
 public class StageController extends Application {
 	
 	@Override
@@ -17,6 +21,8 @@ public class StageController extends Application {
 			BorderPane rootLayout;
 			
 			stage.setTitle( "Cartridge Creator tool" );
+			
+			// I had to set min/max values here, for some reason it ignores fxml settings
 			stage.setMaxWidth(495.0);
 			stage.setMinWidth(495.0);
 			stage.setMinHeight(680.0);
