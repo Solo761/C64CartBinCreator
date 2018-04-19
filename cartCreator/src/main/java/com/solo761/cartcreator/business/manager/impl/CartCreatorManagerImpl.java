@@ -2,6 +2,7 @@ package com.solo761.cartcreator.business.manager.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.solo761.cartcreator.business.fsdao.FileDao;
 import com.solo761.cartcreator.business.fsdao.impl.FileDaoImpl;
@@ -9,7 +10,11 @@ import com.solo761.cartcreator.business.logic.CRTGenerator;
 import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.model.BinFileTemplate;
 import com.solo761.cartcreator.business.model.CartTypes;
+import com.solo761.cartcreator.business.model.LoaderTypes;
+import com.solo761.cartcreator.business.model.VarABinTemplate;
+import com.solo761.cartcreator.business.model.VarBBinTemplate;
 import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
+import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 
 public class CartCreatorManagerImpl implements CartCreatorManager {
 	
@@ -27,81 +32,83 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 		fileDao.saveFile(data, file);
 	}
 	
-	@Override
-	public byte[] calculatePrgSize(int prgSize) {
-		byte[] size;
+	public byte[] createBinFile(CartTypes cType, LoaderTypes lType, byte[] prg) {
 		
-		// first two bytes are BASIC start address, they're not part of PRG
-		// code, so they're not included in size. That's why we substract 2
-		// from prgSize
-		int effectiveSize = prgSize - 2;
+		BinFileTemplate filePrep = null;
 		
-		// bitwise "and" with 0xFF will leave only first two bytes
-		// to get other two bytes we bitshift by 8 bits, effectively moving 
-		// upper two bytes to lower position so bitwise "and" isn't exactly
-		// needed, but better to be safe
-		byte lower = (byte)(effectiveSize & 0xFF);
-		byte higher = (byte)((effectiveSize >> 8) & 0xFF);
-		
-		// order bytes in little endian order and return this array
-		size = new byte[] {lower, higher};
-		
-		return size;
-	}
-	
-	public byte[] createBinFile(CartTypes type, byte[] prg) {
-		
-		BinFileTemplate filePrep = new BinFileTemplate();
-		
-		filePrep.setPrgPayload(prg);
-		filePrep.setPrgSize(calculatePrgSize(filePrep.getPrgPayload().length));
-		
-		switch (type) {
-		case HUCKY:
+		if ( lType == LoaderTypes.PRG2CRT ) {
+			filePrep = new VarABinTemplate();
 			
-			break;
-		case INVERTEDHUCKY:
-			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
-			break;
-		case MAGICDESK:
-			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
-			break;
-		case SIXTEENK:
-			
-			break;
-		case EIGHTK:
-			
-			break;
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( cType ));
+			filePrep.setPrgPayload(prg);
+			((VarABinTemplate) filePrep).setPrgSize(CartCreatorUtils.convertIntToLittleEndian(prg.length - 2));
 		}
-
-		return filePrep.getFinalBin();
-	}
-	
-	public byte[] createCRTFile(CartTypes type, byte[] prg) {
-		
-		BinFileTemplate filePrep = new BinFileTemplate();
-		
-		filePrep.setPrgPayload(prg);
-		filePrep.setPrgSize(calculatePrgSize(filePrep.getPrgPayload().length));
-		
-		switch (type) {
-		case HUCKY:
+		else if ( lType == LoaderTypes.HUCKY ) {
+			filePrep = new VarBBinTemplate();
 			
-			break;
-		case INVERTEDHUCKY:
-			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
-			break;
-		case MAGICDESK:
-			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( type ));
-			break;
-		case SIXTEENK:
-			
-			break;
-		case EIGHTK:
-			
-			break;
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarB( cType ));
+			filePrep.setPrgPayload(prg);
+			((VarBBinTemplate) filePrep).setSysAddress(CartCreatorUtils.convertIntToLittleEndian(
+															CartCreatorUtils.getSysAddress(
+																Arrays.copyOfRange(prg, 0, 15 ) ) ) );
+			((VarBBinTemplate) filePrep).setPrgSize( CartCreatorUtils.convertIntToLittleEndian( prg.length + 2047 ) ); 
 		}
 		
-		return crtGenerator.makeCRT(filePrep.getCRTTemp(), type);
+		
+		// if cart type is hucky switch banks
+		if (cType == CartTypes.HUCKY) {
+			return createHuckyBin(filePrep.getFinalBin());
+		}
+		else
+			return filePrep.getFinalBin();
+	}
+	
+	public byte[] createCRTFile(CartTypes cType, LoaderTypes lType, byte[] prg) {
+		
+		BinFileTemplate filePrep = null;
+		
+		if ( lType == LoaderTypes.PRG2CRT ) {
+			filePrep = new VarABinTemplate();
+			
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( cType ));
+			filePrep.setPrgPayload(prg);
+			((VarABinTemplate) filePrep).setPrgSize(CartCreatorUtils.convertIntToLittleEndian(prg.length - 2));
+		}
+		else if ( lType == LoaderTypes.HUCKY ) {
+			filePrep = new VarBBinTemplate();
+			
+			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarB( cType ));
+			filePrep.setPrgPayload(prg);
+			((VarBBinTemplate) filePrep).setSysAddress(CartCreatorUtils.convertIntToLittleEndian(
+															CartCreatorUtils.getSysAddress(
+																Arrays.copyOfRange(prg, 0, 15 ) ) ) );
+			((VarBBinTemplate) filePrep).setPrgSize( CartCreatorUtils.convertIntToLittleEndian( prg.length + 2047 ) ); 
+		}
+		
+		return crtGenerator.makeCRT(filePrep.getCRTTemp(), cType);
+	}
+	
+	private byte[] createHuckyBin( byte[] bin ) {
+		byte[][] huckyBanks = new byte[8][];
+		
+		int block = 8192;
+		
+		for (int x = 0; x < 8; x++) {
+			huckyBanks[x] = Arrays.copyOfRange(	bin, 
+				x * block, 
+				((x+1) * block) > bin.length ? (bin.length) : ((x+1) * block) );
+		}
+		
+		
+		bin = CartCreatorUtils.concatenateByteArrays( huckyBanks[7],
+													  huckyBanks[6], 
+													  huckyBanks[5],
+													  huckyBanks[4],
+													  huckyBanks[3],
+													  huckyBanks[2],
+													  huckyBanks[1],
+													  huckyBanks[0] );
+		
+		return bin;
 	}
 }

@@ -43,12 +43,12 @@ public class JobListProcessor {
 			try {
 				if ( jobList.isMakeCRT() ) {
 					File outFile = new File( filePath.getOutputFile() + jobList.getCrtExtension() );
-					cartCreatorManager.saveFile(cartCreatorManager.createCRTFile(jobList.getCartType(), prg), outFile);
+					cartCreatorManager.saveFile(cartCreatorManager.createCRTFile(jobList.getCartType(), jobList.getLoaderType(), prg), outFile);
 					System.out.println("Created CRT file: " + outFile.getAbsolutePath() );
 				}
 				if ( jobList.isMakeBin() ) {
 					File outFile = new File( filePath.getOutputFile() + jobList.getBinExtension() );
-					cartCreatorManager.saveFile(cartCreatorManager.createBinFile(jobList.getCartType(), prg), outFile);
+					cartCreatorManager.saveFile(cartCreatorManager.createBinFile(jobList.getCartType(), jobList.getLoaderType(), prg), outFile);
 					System.out.println("Created bin file: " + outFile.getAbsolutePath() );
 				}
 			} catch (IOException e) {

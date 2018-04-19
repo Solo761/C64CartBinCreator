@@ -11,6 +11,7 @@ public class JobList {
 	
 	private List<FilePath> fileList = new ArrayList<FilePath>();
 	private CartTypes cartType;
+	private LoaderTypes loaderType;
 	private String crtExtension = ".crt";
 	private String binExtension = ".bin";
 	private boolean makeCRT;
@@ -29,6 +30,12 @@ public class JobList {
 	}
 	public void setCartType(CartTypes cartType) {
 		this.cartType = cartType;
+	}
+	public LoaderTypes getLoaderType() {
+		return loaderType;
+	}
+	public void setLoaderType(LoaderTypes loaderType) {
+		this.loaderType = loaderType;
 	}
 	public String getCrtExtension() {
 		return crtExtension;

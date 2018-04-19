@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.solo761.cartcreator.business.model.CartTypes;
+import com.solo761.cartcreator.business.model.LoaderTypes;
 
 public interface CartCreatorManager {
 	
@@ -25,39 +26,43 @@ public interface CartCreatorManager {
 	void saveFile(byte[] data, File file) throws IOException;
 	
 	/**
-	 * <p>Calculates prg size to be set in bin and returns it as byte<br>
-	 * array in little endian format ( { lower value, higher value } )</p> 
-	 * @param prgSize - integer with prg file size
-	 * @return <b>byte[]</b> - byte array with little endian formatted prg size
-	 */
-	byte[] calculatePrgSize(int prgSize);
-	
-	/**
 	 * Creates bin file for (E)EPROM from prg<br>
-	 *		 types:<br>
-	 *			HUCKY			-	not implemented yet<br>
+	 * <br>
+	 *		 cTypes:<br>
+	 *			HUCKY<br>
 	 *			INVERTEDHUCKY<br>
 	 *			MAGICDESK<br>
 	 *			SIXTEENK		-	not implemented yet<br>
 	 *			EIGHTK			-	not implemented yet<br>
-	 * @param type - CartTypes enum
+	 *<br>
+	 *		 lTypes:<br>
+	 *			PRG2CRT<br>
+	 *			HUCKY<br>
+	 * @param cType - CartTypes enum
+	 * @param lType - LoaderTypes enum
 	 * @param prg - byte[] with loaded prg
 	 * @return <b>byte[]</b> - prepared bin
 	 */
-	public byte[] createBinFile(CartTypes type, byte[] prg);
+	public byte[] createBinFile(CartTypes cType, LoaderTypes lType, byte[] prg);
 	
 	/**
-	 * Creates bin file for (E)EPROM from prg<br>
-	 *		 types:<br>
-	 *			HUCKY			-	not implemented yet<br>
+	 * Creates CRT file for emulator from prg<br>
+	 * <br>
+	 *		 cTypes:<br>
+	 *			HUCKY<br>
 	 *			INVERTEDHUCKY<br>
 	 *			MAGICDESK<br>
 	 *			SIXTEENK		-	not implemented yet<br>
 	 *			EIGHTK			-	not implemented yet<br>
+	 *<br>
+	 *		 lTypes:<br>
+	 *			PRG2CRT<br>
+	 *			HUCKY<br>
 	 * @param type - CartTypes enum
+	 * @param lType - LoaderTypes enum
 	 * @param prg - byte[] with loaded prg
 	 * @return <b>byte[]</b> - prepared CRT file
 	 */
-	public byte[] createCRTFile(CartTypes type, byte[] prg);
+	public byte[] createCRTFile(CartTypes cType, LoaderTypes lType, byte[] prg);
 
 }

@@ -4,6 +4,8 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CartCreatorUtils {
 	
@@ -98,34 +100,82 @@ public class CartCreatorUtils {
 	 * <i>sysouts</i> help for command line usage
 	 */
 	public static void printHelp() {
-		String help = "Parameters:\r\n" + 
-				"  -i <input file>		prg file to convert\r\n" + 
-				"  -t <cartidge type>		to which cartridge type to convert\r\n" +
-				"\tCartridge types:\r\n" + 
-//				"\t  h				Hucky 64kB\r\n" + 
-				"\t  ih				inverted Hucky 64kB\r\n" + 
-				"\t  md				MagicDesk 64kB\r\n" + 
-//				"\t  16				16kB cartridge\r\n" + 
-//				"\t  8				8kB cartridge\r\n" + 
-				"\r\n" + 
-				"Semioptional (you need at least one of them):\r\n" + 
-				"  -c				convert to emulation cartridge format (CRT)\r\n" +
-				"  -b				convert to bin file for burning to (E)EPROM\r\n" +
-				"\r\n" + 
-				"Optional:\r\n" + 
-				"  -o <output file>		output file to save converted file to, if it differs from input file\r\n" + 
-				"  -h				this help\r\n" + 
-				"\r\n" + 
-				"Example:\r\n" + 
-				"\r\n" + 
-				"Convert prg to inverted hucky bin file\r\n" + 
-				"  java -jar cartConv.jar -i BubbleBobble.prg -t ih -b\r\n" + 
-				"\r\n" + 
-				"Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice) and bin file\r\n" + 
-				"  java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md -c -b\r\n" + 
-				"\r\n" +
-				"FYI: Order of parameters is not important.\r\n";
+		String help = "Parameters:" + System.lineSeparator() + 
+				"  -i <input file>\t\tprg file to convert" + System.lineSeparator() + 
+				"  -t <cartidge type>\t\twhich cartridge type to convert to" + System.lineSeparator() +
+				"\tCartridge types:" + System.lineSeparator() + 
+				"\t  h\t\t\tHucky 64kB" + System.lineSeparator() + 
+				"\t  ih\t\t\tinverted Hucky 64kB" + System.lineSeparator() + 
+				"\t  md\t\t\tMagicDesk 64kB" + System.lineSeparator() + 
+//				"\t  16\t\t\t16kB cartridge" + System.lineSeparator() + 
+//				"\t  8\t\t\t8kB cartridge" + System.lineSeparator() + 
+				" -l <loader type>\t\twhich loader to use" + System.lineSeparator() +
+				"\tLoader types:" + System.lineSeparator() +
+				"\t  a\t\t\tprg2crt loader from Frank Buß' python script" +  System.lineSeparator() +
+				"\t  b\t\t\t152Blks loader" +  System.lineSeparator() +
+				System.lineSeparator() + 
+				"Semioptional (you need at least one of them):" + System.lineSeparator() + 
+				"  -c\t\t\t\tconvert to emulation cartridge format (CRT)" + System.lineSeparator() +
+				"  -b\t\t\t\tconvert to bin file for burning to (E)EPROM" + System.lineSeparator() +
+				System.lineSeparator() +
+				"Optional:" + System.lineSeparator() + 
+				"  -o <output file>\t\toutput file to save converted file to, if it differs from input file" + System.lineSeparator() + 
+				"  -h\t\t\t\tthis help" + System.lineSeparator() + 
+				System.lineSeparator() + 
+				"Example:" + System.lineSeparator() + 
+				System.lineSeparator() + 
+				"Convert prg to inverted hucky bin file using \"a\" variant loader" + System.lineSeparator() + 
+				"  java -jar cartConv.jar -i BubbleBobble.prg -t ih -b -l a" + System.lineSeparator() + 
+				System.lineSeparator() +
+				"Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice) and bin file using \"b\" variant loader" + System.lineSeparator() + 
+				"  java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md -l b -c -b" + System.lineSeparator() + 
+				System.lineSeparator() +
+				"FYI: Order of parameters is not important." + System.lineSeparator();
 		
 		System.out.println( System.lineSeparator() + help );
 	}
+	
+	/**
+	 * Converts int (up to 65536) to byte array with little endian ordering<br>
+	 * ( { lower value, higher value } ) 
+	 * @param value - integer
+	 * @return <b>byte[]</b> - byte array with little endian formatted prg size
+	 */
+	public static byte[] convertIntToLittleEndian(int value) {
+		byte[] littleEndianArr;
+		
+		// bitwise "and" with 0xFF will leave only first two bytes
+		// to get other two bytes we bitshift by 8 bits, effectively moving 
+		// upper two bytes to lower position so bitwise "and" isn't exactly
+		// needed, but better to be safe
+		byte lower = (byte)(value & 0xFF);
+		byte higher = (byte)((value >> 8) & 0xFF);
+		
+		// order bytes in little endian order and return this array
+		littleEndianArr = new byte[] {lower, higher};
+		
+		return littleEndianArr;
+	}
+	
+	
+	/**
+	 * Looks for and returns first 4 digit sequence in passed byte array,<br>
+	 * best way to use it is to send it first 16 - 32 bytes of loaded prg file. 
+	 * @param data - byte array
+	 * @return <b>int</b> - extracted 4 digit integer 
+	 */
+	public static int getSysAddress( byte[] data ) {
+		
+		Pattern pattern = Pattern.compile("(\\d{4})");
+		Matcher matcher = pattern.matcher( new String( data ) );
+
+		int sysAddress = 0;
+		
+		if (matcher.find()) {
+			sysAddress = Integer.parseInt( matcher.group(1) ) ;
+		}
+		
+		return sysAddress;
+	}
+
 }

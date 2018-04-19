@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.solo761.cartcreator.business.logic.GuiPrepareJobList;
@@ -11,6 +12,7 @@ import com.solo761.cartcreator.business.logic.JobListProcessor;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FileData;
 import com.solo761.cartcreator.business.model.JobList;
+import com.solo761.cartcreator.business.model.LoaderTypes;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
 
 import javafx.collections.FXCollections;
@@ -22,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SelectionMode;
@@ -48,6 +51,9 @@ public class MainWindowController implements Initializable {
 
     @FXML
     private ChoiceBox<CartTypes> choiceBoxCartType;
+    
+    @FXML
+    private ChoiceBox<LoaderTypes> choiceBoxLoaderType;
 
     @FXML
     private CheckBox checkBoxCreateBin;
@@ -75,6 +81,7 @@ public class MainWindowController implements Initializable {
         assert btnAddFile != null : "fx:id=\"btnAddFile\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert btnRemoveFile != null : "fx:id=\"btnRemoveFile\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert choiceBoxCartType != null : "fx:id=\"choiceBoxCartType\" was not injected: check your FXML file 'MainWindow.fxml'.";
+        assert choiceBoxLoaderType != null : "fx:id=\"choiceBoxLoaderType\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert checkBoxCreateBin != null : "fx:id=\"checkBoxCreateBin\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert checkBoxCreateCRT != null : "fx:id=\"checkBoxCreateCRT\" was not injected: check your FXML file 'MainWindow.fxml'.";
         assert btnStart != null : "fx:id=\"btnStart\" was not injected: check your FXML file 'MainWindow.fxml'.";
@@ -175,8 +182,10 @@ public class MainWindowController implements Initializable {
 	 * Manually fill cart type dropdown menu, since not all types are implemented yet
 	 */
 	private void fillDropDownTypes() {
-		choiceBoxCartType.getItems().setAll(CartTypes.INVERTEDHUCKY, CartTypes.MAGICDESK);
+		choiceBoxCartType.getItems().setAll(CartTypes.INVERTEDHUCKY, CartTypes.HUCKY, CartTypes.MAGICDESK);
 		choiceBoxCartType.getSelectionModel().select(0);
+		choiceBoxLoaderType.getItems().setAll(LoaderTypes.values());
+		choiceBoxLoaderType.getSelectionModel().select(0);
 	}
 
 	/**
@@ -262,13 +271,35 @@ public class MainWindowController implements Initializable {
 			return;
 		}
 		
-		JobList jobList = guiJobListParser.prepareJobList( tableViewMain.getItems(), textFieldOutput.getText() );
+		if ( choiceBoxCartType.getSelectionModel().getSelectedItem() == CartTypes.HUCKY && checkBoxCreateCRT.isSelected() ) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("CRT file info");
+			alert.setHeaderText( "You have selected Hucky cartridge type and CRT checkbox." );
+			String message = "AFAIK emulators (and/or CRT file format) don't have support for"
+					+ " Hucky bank configuration, but they do support inverted"
+					+ " Hucky bank configuration (so called RGCD carts)." + System.lineSeparator() + System.lineSeparator()
+					+ "If you choose to continue banks in CRT files generated will be in inverted Hucky"
+					+ " configuration so they will work in emulators.";
+			if ( checkBoxCreateBin.isSelected() )
+				message += System.lineSeparator() + System.lineSeparator() + "Bin files will be created with correct Hucky configuration!";
+			alert.setContentText( message );
+			
+			ButtonType buttonContinue = new ButtonType("Continue");
+			ButtonType buttonAbort = new ButtonType("Abort");
+			
+			alert.getButtonTypes().setAll(buttonContinue, buttonAbort);
+			
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonAbort)
+				return;
+		}
 		
-		jobList.setCartType(choiceBoxCartType.getSelectionModel().getSelectedItem());
-		if (checkBoxCreateBin.isSelected())
-			jobList.setMakeBin(true);
-		if (checkBoxCreateCRT.isSelected())
-			jobList.setMakeCRT(true);
+		JobList jobList = guiJobListParser.prepareJobList( tableViewMain.getItems(), 
+														   textFieldOutput.getText(),
+														   choiceBoxCartType.getSelectionModel().getSelectedItem(),
+														   choiceBoxLoaderType.getSelectionModel().getSelectedItem(), 
+														   checkBoxCreateBin.isSelected(),
+														   checkBoxCreateCRT.isSelected() );
 		
 		jobListProcessor.processJobList(jobList);
 	}

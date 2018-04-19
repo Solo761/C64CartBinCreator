@@ -16,13 +16,15 @@
          <children>
             <Button fx:id="btnAddFile" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Add File" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
             <Button fx:id="btnRemoveFile" layoutX="90.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Remove" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="14.0" />
-            <ChoiceBox fx:id="choiceBoxCartType" layoutX="316.0" layoutY="14.0" prefWidth="150.0" AnchorPane.leftAnchor="316.0" AnchorPane.topAnchor="14.0" />
-            <CheckBox fx:id="checkBoxCreateBin" layoutX="14.0" layoutY="85.0" mnemonicParsing="false" selected="true" text="Create Bin" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="85.0" />
-            <CheckBox fx:id="checkBoxCreateCRT" layoutX="107.0" layoutY="85.0" mnemonicParsing="false" text="Create CRT" AnchorPane.leftAnchor="107.0" AnchorPane.topAnchor="85.0" />
-            <Button fx:id="btnStart" layoutX="406.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Start" AnchorPane.leftAnchor="406.0" AnchorPane.topAnchor="81.0" />
-            <Label layoutX="228.0" layoutY="18.0" text="Cartridge Type:" AnchorPane.leftAnchor="228.0" AnchorPane.topAnchor="18.0" />
-            <TextField fx:id="textFieldOutput" layoutX="90.0" layoutY="48.0" prefHeight="25.0" prefWidth="376.0" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="48.0" />
-            <Button fx:id="btnBrowseOutput" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Browse" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="48.0" />
+            <ChoiceBox fx:id="choiceBoxCartType" layoutX="276.0" layoutY="14.0" prefHeight="25.0" prefWidth="190.0" AnchorPane.leftAnchor="276.0" AnchorPane.topAnchor="14.0" />
+            <CheckBox fx:id="checkBoxCreateBin" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" selected="true" text="Create Bin" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="52.0" />
+            <CheckBox fx:id="checkBoxCreateCRT" layoutX="96.0" layoutY="52.0" mnemonicParsing="false" text="Create CRT" AnchorPane.leftAnchor="96.0" AnchorPane.topAnchor="52.0" />
+            <Button fx:id="btnStart" layoutX="406.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Start" AnchorPane.leftAnchor="406.0" AnchorPane.topAnchor="84.0" />
+            <Label layoutX="187.0" layoutY="18.0" text="Cartridge Type:" AnchorPane.leftAnchor="187.0" AnchorPane.topAnchor="18.0" />
+            <TextField fx:id="textFieldOutput" layoutX="89.0" layoutY="84.0" prefHeight="25.0" prefWidth="302.0" AnchorPane.leftAnchor="89.0" AnchorPane.topAnchor="84.0" />
+            <Button fx:id="btnBrowseOutput" layoutX="14.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Browse" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="84.0" />
+            <Label layoutX="200.0" layoutY="52.0" prefHeight="17.0" prefWidth="70.0" text="Loader Type:" />
+            <ChoiceBox fx:id="choiceBoxLoaderType" layoutX="276.0" layoutY="48.0" prefHeight="25.0" prefWidth="190.0" />
          </children>
       </AnchorPane>
    </top>

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.solo761.cartcreator</groupId>
   <artifactId>cartCreator</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
   <name>C64 Cartridge Creator</name>
 
   <dependencies>

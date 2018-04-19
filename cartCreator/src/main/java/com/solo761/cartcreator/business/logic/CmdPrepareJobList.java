@@ -3,6 +3,7 @@ package com.solo761.cartcreator.business.logic;
 import java.io.File;
 
 import com.solo761.cartcreator.business.model.JobList;
+import com.solo761.cartcreator.business.model.LoaderTypes;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FilePath;
 import com.solo761.cartcreator.business.utils.CartCreatorUtils;
@@ -18,9 +19,6 @@ public class CmdPrepareJobList {
 	 * @return <b>Arguments</b> - Arguments object with filled in parameters
 	 */
 	public JobList prepareJobList(String[] args) {
-		//List<String> argsList = Arrays.asList(args);
-		//Map<String, String> argsMap = new HashMap<String, String>();
-		
 		JobList jobList = new JobList();
 		
 		StringBuffer errors = new StringBuffer();
@@ -46,6 +44,8 @@ public class CmdPrepareJobList {
 				if ( (x + 1) < args.length ) {
 					if ( "ih".equals( args[x+1].toLowerCase() ) )
 						jobList.setCartType(CartTypes.INVERTEDHUCKY);
+					if ( "h".equals( args[x+1].toLowerCase() ) )
+						jobList.setCartType(CartTypes.HUCKY);
 					else if ( "md".equals( args[x+1].toLowerCase() ) )
 						jobList.setCartType(CartTypes.MAGICDESK);
 					else
@@ -65,6 +65,18 @@ public class CmdPrepareJobList {
 					errors.append( "Output parameter is missing file path" + System.lineSeparator() );
 			}
 			
+			// check for loader type
+			if ( "-l".equals(args[x].toLowerCase()) ) {
+				if ( (x + 1) < args.length ) {
+					if ( "a".equals( args[x+1].toLowerCase() ) )
+						jobList.setLoaderType(LoaderTypes.PRG2CRT);
+					else if ( "b".equals( args[x+1].toLowerCase() ) )
+						jobList.setLoaderType(LoaderTypes.HUCKY);
+					else
+						errors.append( "Unsupported loader type" + System.lineSeparator() );
+				}
+			}
+			
 			// check if user wants CRT file
 			if ( "-c".equals(args[x].toLowerCase()) ) {
 				jobList.setMakeCRT( true );
@@ -80,17 +92,19 @@ public class CmdPrepareJobList {
 				jobList.setHelp( true );
 				break;
 			}
-			
 		}
 		
 		if ( filePaths.getInputFile() == null )
 			errors.append( "Input file not entered" + System.lineSeparator() );
 		
-		if ( filePaths.getInputFile() != null && jobList.getCartType() == null)
+		if ( filePaths.getInputFile() != null && jobList.getCartType() == null )
 			errors.append( "You must enter cart type" + System.lineSeparator() );
 		
-		if ( jobList.isMakeBin() == false && jobList.isMakeCRT() == false )
+		if ( filePaths.getInputFile() != null && jobList.isMakeBin() == false && jobList.isMakeCRT() == false )
 			errors.append( "You must enter at least one parameter for output file type" + System.lineSeparator() );
+		
+		if ( filePaths.getInputFile() != null &&jobList.getLoaderType() == null )
+			errors.append( "You must enter loader type" + System.lineSeparator() );
 		
 		jobList.setErrors( errors.toString() );
 		

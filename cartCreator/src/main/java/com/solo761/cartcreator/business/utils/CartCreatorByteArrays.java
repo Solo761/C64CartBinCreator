@@ -1,5 +1,7 @@
 package com.solo761.cartcreator.business.utils;
 
+import java.nio.ByteBuffer;
+
 import com.solo761.cartcreator.business.model.CartTypes;
 
 /**
@@ -98,12 +100,14 @@ public class CartCreatorByteArrays {
 	 * @param type - CartTypes type
 	 * @return <b>byte[]</b> - prepared loader
 	 */
-	public static byte[] getLoaderVarA(CartTypes type) {
+	public static byte[] getLoaderVarA( CartTypes type ) {
 		byte[] loader = loaderVarA.clone();
+		
 		if ( type == CartTypes.HUCKY || type == CartTypes.INVERTEDHUCKY )
 			loader[143] = (byte) 0x08;
 		else if ( type == CartTypes.MAGICDESK )
 			loader[143] = (byte) 0x80;
+		
 		return loader;
 	}
 	
@@ -112,12 +116,14 @@ public class CartCreatorByteArrays {
 	 * @param type - CartTypes type
 	 * @return <b>byte[]</b> - prepared loader
 	 */
-	public static byte[] getLoaderVarB(CartTypes type) {
+	public static byte[] getLoaderVarB( CartTypes type ) {
 		byte[] loader = loaderVarB.clone();
+		
 		if ( type == CartTypes.HUCKY || type == CartTypes.INVERTEDHUCKY )
 			loader[181] = (byte) 0x08;
 		else if ( type == CartTypes.MAGICDESK )
 			loader[181] = (byte) 0x80;
-		return loader;
+		
+		return ByteBuffer.allocate( 2048 ).put(loader).array();
 	}
 }

@@ -2,20 +2,30 @@ package com.solo761.cartcreator.business.logic;
 
 import java.util.List;
 
+import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FileData;
 import com.solo761.cartcreator.business.model.FilePath;
 import com.solo761.cartcreator.business.model.JobList;
+import com.solo761.cartcreator.business.model.LoaderTypes;
 
 public class GuiPrepareJobList {
 
-	/** Takes FileData list with output path string and returns JobList object<br>
-	 *  with prepared FilePath list. At this point it's still <b>missing cartType and<br>
-	 *  bin/crt booleans</b> needed by JobListProcessor
+	/** Takes FileData list, output path string, CartType, LoaderType, boolean bin<br>
+	 *  boolean crt and returns populated JobList object
 	 * @param fileList
 	 * @param fileOutput
+	 * @param cType
+	 * @param lType
+	 * @param bin
+	 * @param crt
 	 * @return <b>JobList</>
 	 */
-	public JobList prepareJobList( List<FileData> fileList, String fileOutput ) {
+	public JobList prepareJobList( List<FileData> fileList, 
+								   String fileOutput, 
+								   CartTypes cType, 
+								   LoaderTypes lType, 
+								   boolean bin, 
+								   boolean crt ) {
 		
 		JobList jobList = new JobList();
 		
@@ -25,6 +35,11 @@ public class GuiPrepareJobList {
 			filePath.setOutputFile(fileOutput + "\\" + fileData.getFileName().substring(0, fileData.getFileName().lastIndexOf(".")));
 			jobList.getFileList().add(filePath);
 		}
+		
+		jobList.setCartType(cType);
+		jobList.setLoaderType(lType);
+		jobList.setMakeBin( bin );
+		jobList.setMakeCRT( crt );
 		
 		return jobList;
 	}
