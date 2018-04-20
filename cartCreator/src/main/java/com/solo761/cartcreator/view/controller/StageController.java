@@ -21,7 +21,7 @@ public class StageController extends Application {
 		try {
 			BorderPane rootLayout;
 			
-			stage.setTitle( "Cartridge Creator tool 1.0.0 by Solo761" );
+			stage.setTitle( "C64 Cartridge Creator tool 1.0.0 by Solo761" );
 			
 			// I had to set min/max values here, for some reason it ignores fxml settings
 			stage.setMaxWidth(495.0);

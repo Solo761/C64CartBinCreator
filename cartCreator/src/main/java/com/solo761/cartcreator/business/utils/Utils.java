@@ -100,7 +100,7 @@ public class Utils {
 	 * <i>sysouts</i> help for command line usage
 	 */
 	public static void printHelp() {
-		String help = "Cartridge Creator tool 1.0.0 by Solo761" + System.lineSeparator() + System.lineSeparator() +
+		String help = "C64 Cartridge Creator tool 1.0.0 by Solo761" + System.lineSeparator() + System.lineSeparator() +
 				"Parameters:" + System.lineSeparator() + 
 				"  -i <input file>\t\tprg file to convert" + System.lineSeparator() + 
 				"  -t <cartidge type>\t\twhich cartridge type to convert to" + System.lineSeparator() +
