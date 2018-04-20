@@ -6,7 +6,7 @@ import com.solo761.cartcreator.business.model.JobList;
 import com.solo761.cartcreator.business.model.LoaderTypes;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FilePath;
-import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+import com.solo761.cartcreator.business.utils.Utils;
 
 public class CmdPrepareJobList {
 	
@@ -30,7 +30,7 @@ public class CmdPrepareJobList {
 			// check for input command and matching path
 			if ( "-i".equals(args[x].toLowerCase()) ) {
 				if ( (x + 1) < args.length ) {
-					if ( !CartCreatorUtils.isFile( args[x + 1] ) )
+					if ( !Utils.isFile( args[x + 1] ) )
 						errors.append( "Input parameter is not a file" + System.lineSeparator() );
 					else if ( !"prg".equals( args[x + 1].substring(args[x + 1].length() - 3, args[x + 1].length()) ) )
 						errors.append( "Input file is not prg file" + System.lineSeparator() );
@@ -56,7 +56,7 @@ public class CmdPrepareJobList {
 			// check for output command and matching path
 			if ( "-o".equals(args[x].toLowerCase()) ) {
 				if ( (x + 1) < args.length ) {
-					if ( !CartCreatorUtils.isPathNio( args[x + 1] ) )
+					if ( !Utils.isPathNio( args[x + 1] ) )
 						errors.append( "Output parameter is not correct file path" + System.lineSeparator() );
 					else 
 						filePaths.setOutputFile( args[x + 1] );

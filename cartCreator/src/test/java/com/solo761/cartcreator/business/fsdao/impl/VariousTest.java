@@ -19,7 +19,7 @@ import com.solo761.cartcreator.business.model.FilePath;
 import com.solo761.cartcreator.business.model.JobList;
 import com.solo761.cartcreator.business.model.LoaderTypes;
 import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
-import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+import com.solo761.cartcreator.business.utils.Utils;
 
 public class VariousTest {
 	
@@ -27,7 +27,7 @@ public class VariousTest {
 	
 	@Test
 	public void helpTest() {
-		CartCreatorUtils.printHelp();
+		Utils.printHelp();
 	}
 	
 	@Test
@@ -175,7 +175,7 @@ public class VariousTest {
 			System.out.println( "SYS address String: " + extractedString );
 			int convertedInt = Integer.parseInt( extractedString ) ;
 			System.out.println( "SYS address Int: " + convertedInt );
-			byte[] sysAddr = CartCreatorUtils.convertIntToLittleEndian( convertedInt );
+			byte[] sysAddr = Utils.convertIntToLittleEndian( convertedInt );
 			System.out.println( "SYS address bytes: " + String.format("%02X ", sysAddr[0] ) + ", " + String.format("%02X ", sysAddr[1] ) );
 		}
 		

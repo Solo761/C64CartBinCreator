@@ -13,7 +13,7 @@ import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FileData;
 import com.solo761.cartcreator.business.model.JobList;
 import com.solo761.cartcreator.business.model.LoaderTypes;
-import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+import com.solo761.cartcreator.business.utils.Utils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -249,8 +249,8 @@ public class MainWindowController implements Initializable {
 			alert.showAndWait();
 			return;
 		}
-		else if ( !CartCreatorUtils.isPath( textFieldOutput.getText().trim() ) ) {
-			if ( !CartCreatorUtils.makeDir( textFieldOutput.getText().trim() ) ) {
+		else if ( !Utils.isPath( textFieldOutput.getText().trim() ) ) {
+			if ( !Utils.makeDir( textFieldOutput.getText().trim() ) ) {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Output path wrong");
 				alert.setHeaderText(null);

@@ -3,7 +3,7 @@ package com.solo761.cartcreator.main;
 import com.solo761.cartcreator.business.logic.CmdPrepareJobList;
 import com.solo761.cartcreator.business.logic.JobListProcessor;
 import com.solo761.cartcreator.business.model.JobList;
-import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+import com.solo761.cartcreator.business.utils.Utils;
 import com.solo761.cartcreator.view.controller.StageController;
 
 public class Main{
@@ -18,7 +18,7 @@ public class Main{
 		if ( args.length > 0 ) {
 			JobList jobList = cmdJobListParser.prepareJobList(args);
 			if ( jobList.isHelp() ) {
-				CartCreatorUtils.printHelp();
+				Utils.printHelp();
 				return;
 			}
 			if ( jobList.getErrors().length() > 0 ) {

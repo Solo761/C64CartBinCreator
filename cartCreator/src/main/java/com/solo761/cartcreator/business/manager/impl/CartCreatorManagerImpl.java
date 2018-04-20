@@ -14,7 +14,7 @@ import com.solo761.cartcreator.business.model.LoaderTypes;
 import com.solo761.cartcreator.business.model.VarABinTemplate;
 import com.solo761.cartcreator.business.model.VarBBinTemplate;
 import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
-import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+import com.solo761.cartcreator.business.utils.Utils;
 
 public class CartCreatorManagerImpl implements CartCreatorManager {
 	
@@ -41,17 +41,17 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 			
 			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( cType ));
 			filePrep.setPrgPayload(prg);
-			((VarABinTemplate) filePrep).setPrgSize(CartCreatorUtils.convertIntToLittleEndian(prg.length - 2));
+			((VarABinTemplate) filePrep).setPrgSize(Utils.convertIntToLittleEndian(prg.length - 2));
 		}
 		else if ( lType == LoaderTypes.HUCKY ) {
 			filePrep = new VarBBinTemplate();
 			
 			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarB( cType ));
 			filePrep.setPrgPayload(prg);
-			((VarBBinTemplate) filePrep).setSysAddress(CartCreatorUtils.convertIntToLittleEndian(
-															CartCreatorUtils.getSysAddress(
+			((VarBBinTemplate) filePrep).setSysAddress(Utils.convertIntToLittleEndian(
+															Utils.getSysAddress(
 																Arrays.copyOfRange(prg, 0, 15 ) ) ) );
-			((VarBBinTemplate) filePrep).setPrgSize( CartCreatorUtils.convertIntToLittleEndian( prg.length + 2047 ) ); 
+			((VarBBinTemplate) filePrep).setPrgSize( Utils.convertIntToLittleEndian( prg.length + 2047 ) ); 
 		}
 		
 		
@@ -72,17 +72,17 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 			
 			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarA( cType ));
 			filePrep.setPrgPayload(prg);
-			((VarABinTemplate) filePrep).setPrgSize(CartCreatorUtils.convertIntToLittleEndian(prg.length - 2));
+			((VarABinTemplate) filePrep).setPrgSize(Utils.convertIntToLittleEndian(prg.length - 2));
 		}
 		else if ( lType == LoaderTypes.HUCKY ) {
 			filePrep = new VarBBinTemplate();
 			
 			filePrep.setLoaderPayload(CartCreatorByteArrays.getLoaderVarB( cType ));
 			filePrep.setPrgPayload(prg);
-			((VarBBinTemplate) filePrep).setSysAddress(CartCreatorUtils.convertIntToLittleEndian(
-															CartCreatorUtils.getSysAddress(
+			((VarBBinTemplate) filePrep).setSysAddress(Utils.convertIntToLittleEndian(
+															Utils.getSysAddress(
 																Arrays.copyOfRange(prg, 0, 15 ) ) ) );
-			((VarBBinTemplate) filePrep).setPrgSize( CartCreatorUtils.convertIntToLittleEndian( prg.length + 2047 ) ); 
+			((VarBBinTemplate) filePrep).setPrgSize( Utils.convertIntToLittleEndian( prg.length + 2047 ) ); 
 		}
 		
 		return crtGenerator.makeCRT(filePrep.getCRTTemp(), cType);
@@ -100,7 +100,7 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 		}
 		
 		
-		bin = CartCreatorUtils.concatenateByteArrays( huckyBanks[7],
+		bin = Utils.concatenateByteArrays( huckyBanks[7],
 													  huckyBanks[6], 
 													  huckyBanks[5],
 													  huckyBanks[4],

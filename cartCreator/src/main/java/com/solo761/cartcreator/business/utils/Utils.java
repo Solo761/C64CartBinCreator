@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CartCreatorUtils {
+public class Utils {
 	
 	
 	/**
@@ -100,7 +100,8 @@ public class CartCreatorUtils {
 	 * <i>sysouts</i> help for command line usage
 	 */
 	public static void printHelp() {
-		String help = "Parameters:" + System.lineSeparator() + 
+		String help = "Cartridge Creator tool 1.0.0 by Solo761" + System.lineSeparator() + System.lineSeparator() +
+				"Parameters:" + System.lineSeparator() + 
 				"  -i <input file>\t\tprg file to convert" + System.lineSeparator() + 
 				"  -t <cartidge type>\t\twhich cartridge type to convert to" + System.lineSeparator() +
 				"\tCartridge types:" + System.lineSeparator() + 
@@ -132,7 +133,7 @@ public class CartCreatorUtils {
 				System.lineSeparator() +
 				"FYI: Order of parameters is not important." + System.lineSeparator();
 		
-		System.out.println( System.lineSeparator() + help );
+		System.out.println(help );
 	}
 	
 	/**

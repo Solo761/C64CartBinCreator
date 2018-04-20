@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import com.solo761.cartcreator.business.model.CartTypes;
-import com.solo761.cartcreator.business.utils.CartCreatorUtils;
+import com.solo761.cartcreator.business.utils.Utils;
 
 public class CRTGenerator {
 	
@@ -80,7 +80,7 @@ public class CRTGenerator {
 			break;
 		}
 		
-		byte[] crtHeader = CartCreatorUtils.concatenateByteArrays(	crtSignature, 
+		byte[] crtHeader = Utils.concatenateByteArrays(	crtSignature, 
 																	headerLength, 
 																	cartridgeVersion, 
 																	cartType,
@@ -97,7 +97,7 @@ public class CRTGenerator {
 		
 		for (int x = 0; x < banks; x++  ) {
 			chipBankNumber[1] = (byte)x;
-			b.put(CartCreatorUtils.concatenateByteArrays(	chipString, 
+			b.put(Utils.concatenateByteArrays(	chipString, 
 															chipPacketLength, 
 															chipType, 
 															chipBankNumber,

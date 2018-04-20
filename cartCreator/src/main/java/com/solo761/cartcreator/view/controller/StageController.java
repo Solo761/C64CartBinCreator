@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -20,12 +21,15 @@ public class StageController extends Application {
 		try {
 			BorderPane rootLayout;
 			
-			stage.setTitle( "Cartridge Creator tool" );
+			stage.setTitle( "Cartridge Creator tool 1.0.0 by Solo761" );
 			
 			// I had to set min/max values here, for some reason it ignores fxml settings
 			stage.setMaxWidth(495.0);
 			stage.setMinWidth(495.0);
 			stage.setMinHeight(680.0);
+			
+			Image icon = new Image(ClassLoader.getSystemResourceAsStream("icon/binary128.png"));
+			stage.getIcons().add(icon);
 			
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(ClassLoader.getSystemResource("fxml/MainWindow.fxml"));
