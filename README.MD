@@ -1,3 +1,4 @@
+
 # C64 Cartridge Creator tool
 
 This is small utility written in Java (1.8) for converting C64 prg files to BIN files for burning to (E)EPROM chips, of up to 64 kB.
@@ -15,7 +16,7 @@ Basically, difference between *Hucky* and *Inverted Hucky* is order of memory ba
 
 Basically just start jar file. Either from command line
 
-`java -jar cartCreator.jar
+`java -jar cartCreator.jar`
 
 or just double click jar file from windows, on my PC (Win 10) it automatically starts the tool.
 
@@ -30,25 +31,27 @@ Tool also supports command line usage, enter
 in command line to see help
 
 
-`Parameters:
-  -i <input file>		prg file to convert
-  -t <cartidge type>		which cartridge type to convert to
-	Cartridge types:
-	  h			Hucky 64kB
-	  ih			inverted Hucky 64kB
-	  md			MagicDesk 64kB
- -l <loader type>		which loader to use
-	Loader types:
-	  a			prg2crt loader from Frank Buß' python script
-	  b			152Blks loader
+- Parameters:
+	-  **-i \<input file\>** -prg file to convert`
+	-  **-t \<cartidge type\>**	- which cartridge type to convert to
+		- Cartridge types:
+			- **h** - Hucky 64kB
+			- **ih** - inverted Hucky 64kB
+			- **md** - MagicDesk 64kB
+	- **-l \<loader type\>** - which loader to use
+		 - Loader types:
+			- **a** - prg2crt loader from Frank Buß' python script
+			- **b** - 152Blks loader
 
-Semioptional (you need at least one of them):
-  -c				convert to emulation cartridge format (CRT)
-  -b				convert to bin file for burning to (E)EPROM
+- Semioptional (you need at least one of them):
+	- **-c** - convert to emulation cartridge format (CRT)
+	- **-b** - convert to bin file for burning to (E)EPROM
 
-Optional:
-  -o <output file>		output file to save converted file to, if it differs from input file
-  -h				help`
+- Optional:
+	 - **-o \<output file\>** - output file to save converted file to, if it differs from input file
+	- **-h** - 				help`
+
+Order of parameters is not important.
 
 For example:
 
@@ -57,5 +60,3 @@ Convert prg to inverted hucky bin file using "a" variant loader
 
 Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice) and bin file using "b" variant loader
 `java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md -l b -c -b`
-
-Order of parameters is not important.
