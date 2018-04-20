@@ -56,7 +56,9 @@ Order of parameters is not important.
 For example:
 
 Convert prg to inverted hucky bin file using "a" variant loader
+
 `java -jar cartConv.jar -i BubbleBobble.prg -t ih -b -l a`
 
 Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice) and bin file using "b" variant loader
+
 `java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md -l b -c -b`
