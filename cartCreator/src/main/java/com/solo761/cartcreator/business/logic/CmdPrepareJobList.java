@@ -44,7 +44,7 @@ public class CmdPrepareJobList {
 				if ( (x + 1) < args.length ) {
 					if ( "ih".equals( args[x+1].toLowerCase() ) )
 						jobList.setCartType(CartTypes.INVERTEDHUCKY);
-					if ( "h".equals( args[x+1].toLowerCase() ) )
+					else if ( "h".equals( args[x+1].toLowerCase() ) )
 						jobList.setCartType(CartTypes.HUCKY);
 					else if ( "md".equals( args[x+1].toLowerCase() ) )
 						jobList.setCartType(CartTypes.MAGICDESK);
