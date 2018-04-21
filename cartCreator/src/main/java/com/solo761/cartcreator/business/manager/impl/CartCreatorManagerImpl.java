@@ -88,6 +88,13 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 		return crtGenerator.makeCRT(filePrep.getCRTTemp(), cType);
 	}
 	
+	
+	/** Converts regular bin file to hucky style bin file,<br>
+	 *  basically splits byte[] into 8 byte[] of 8192 bytes in length<br>
+	 *  (banks) and then puts them back in reverese order. 
+	 * @param bin 
+	 * @return <b>byte[]</b>
+	 */
 	private byte[] createHuckyBin( byte[] bin ) {
 		byte[][] huckyBanks = new byte[8][];
 		
