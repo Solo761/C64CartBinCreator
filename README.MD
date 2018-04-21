@@ -75,7 +75,7 @@ MagicDesk board should support up to **256 kB (E)EPROM chips**, but can create o
 While it could create BIN/CRT files from bigger PRG files they wouldn't be able to start as they wouldn't fit in C64 RAM.
 But you can use [Magic Desk Compatible Cartridge Generator tool](http://csdb.dk/release/?id=132937) from C64 Scene Database to create multi game/application cartridges to fill those 256 kB. My goal for this was to make one cartridge - one game so I didn't dig deeper into it.
 
-**Hucky/Iverted Hucky** 
+**Hucky/Inverted Hucky** 
 
 ![image](cartCreator/EagleSchematics/HuckyV2_Front.JPG)
 ![image](cartCreator/EagleSchematics/HuckyV2_Back.JPG)
