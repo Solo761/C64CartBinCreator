@@ -62,3 +62,23 @@ Convert prg to inverted hucky bin file using "a" variant loader
 Convert prg to MagicDesk CRT file for use in emulator (e.g. Vice) and bin file using "b" variant loader
 
 `java -jar cartConv.jar -i BubbleBobble.prg -o BubbleBobbleEmu.crt -t md -l b -c -b`
+
+## Additional stuff
+
+In folder *EagleSchematics* are two PCB schematics and designs that can be opened with Eagle PCB, one for MagicDesk compatible cartridge and the other for Hucky/Inverted Hucky cartridge (how you solder three bridges on PCB selects if it's going to work as Inverted Hucky or normal Hucky board.
+
+There are also gerber files for both of them if you want to order them from some PCB manufacturer. If they don't require some special settings these should do, if not you can load schematics/design files to Eagle and make gerber files with their settings.
+
+So far they're untested, I've made one Hucky board DIY with above schematics and it works. I also have both boards made from above gerber files, but so far haven't tried them, I've been busy making this tool :).
+
+MagicDesk board should support up to **256 kB (E)EPROM chips**, but can create only up to 64 kB images. Or more simply said, it needs to fit in C64 RAM, basically any game that could be ran from the tape. 
+While it could create BIN/CRT files from bigger PRG files they wouldn't be able to start as they wouldn't fit in C64 RAM.
+But you can use [Magic Desk Compatible Cartridge Generator tool](http://csdb.dk/release/?id=132937) from C64 Scene Database to create multi game/application cartridges to fill those 256 kB. My goal for this was to make one cartridge - one game so I didn't dig deeper into it.
+
+**Hucky/Iverted Hucky** 
+![image](cartCreator/EagleSchematics/HuckyV2_Front.JPG)
+![image](cartCreator/EagleSchematics/HuckyV2_Back.JPG)
+
+**MagicDesk**
+![image](cartCreator/EagleSchematics/MagicDesk_Front.JPG)
+![image](cartCreator/EagleSchematics/MagicDesk_Back.JPG)

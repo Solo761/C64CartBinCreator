@@ -38,6 +38,10 @@ public class VarBBinTemplate extends BinFileTemplate {
 		prg = Arrays.copyOfRange(prg, 1, prg.length - 1);
 		prg[0] = (byte) 0x00;
 		
+		// check if loader + prg are larger than 64 kB, if so return null
+		if (super.getLoaderPayload().length + super.getPrgPayload().length > 65536 )
+			return null;
+		
 		ByteBuffer b = ByteBuffer.allocate(65536);
 		b.put(loader);
 	  	b.put(prg);
@@ -62,6 +66,10 @@ public class VarBBinTemplate extends BinFileTemplate {
 		byte[] prg = super.getPrgPayload();
 		prg = Arrays.copyOfRange(prg, 1, prg.length - 1);
 		prg[0] = (byte) 0x00;
+		
+		// check if loader + prg are larger than 64 kB, if so return null
+		if (super.getLoaderPayload().length + super.getPrgPayload().length > 65536 )
+			return null;
 		
 		ByteBuffer b = ByteBuffer.allocate(loader.length + prg.length);
 		b.put(loader);

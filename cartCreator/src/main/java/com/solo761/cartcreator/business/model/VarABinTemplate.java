@@ -18,15 +18,26 @@ public class VarABinTemplate extends BinFileTemplate {
 
 	@Override
 	public byte[] getFinalBin() {
+		
+		// check if loader + prgSize + prg are larger than 64 kB, if so return null
+		if (super.getLoaderPayload().length + prgSize.length + super.getPrgPayload().length > 65536 )
+			return null;
+		
 		ByteBuffer b = ByteBuffer.allocate(65536);
 		b.put(super.getLoaderPayload());
 		b.put(prgSize);
 		b.put(super.getPrgPayload());
+		
 		return b.array();
 	}
 
 	@Override
 	public byte[] getCRTTemp() {
+		
+		// check if loader + prgSize + prg are larger than 64 kB, if so return null
+		if (super.getLoaderPayload().length + prgSize.length + super.getPrgPayload().length > 65536 )
+			return null;
+		
 		ByteBuffer b = ByteBuffer.allocate(super.getLoaderPayload().length + prgSize.length + super.getPrgPayload().length);
 		b.put(super.getLoaderPayload());
 		b.put(prgSize);
