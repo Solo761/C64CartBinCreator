@@ -11,8 +11,7 @@ import org.junit.Test;
 
 import com.solo761.cartcreator.business.logic.CmdPrepareJobList;
 import com.solo761.cartcreator.business.logic.JobListProcessor;
-import com.solo761.cartcreator.business.manager.CartCreatorManager;
-import com.solo761.cartcreator.business.manager.impl.CartCreatorManagerImpl;
+import com.solo761.cartcreator.business.manager.Manager;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.JobList;
 import com.solo761.cartcreator.business.model.LoaderTypes;
@@ -20,7 +19,7 @@ import com.solo761.cartcreator.business.utils.Utils;
 
 public class VariousTest {
 	
-	private CartCreatorManager cartCreatorManager = new CartCreatorManagerImpl();
+	private Manager cartCreatorManager = new Manager();
 	private CmdPrepareJobList cmdPrepareJobList = new CmdPrepareJobList();
 	private JobListProcessor jobListProcessor = new JobListProcessor();
 	

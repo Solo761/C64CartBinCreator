@@ -1,4 +1,4 @@
-package com.solo761.cartcreator.business.manager.impl;
+package com.solo761.cartcreator.business.manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,6 @@ import java.util.Arrays;
 import com.solo761.cartcreator.business.fsdao.FileDao;
 import com.solo761.cartcreator.business.fsdao.impl.FileDaoImpl;
 import com.solo761.cartcreator.business.logic.CRTGenerator;
-import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.model.BinFileTemplate;
 import com.solo761.cartcreator.business.model.CartCreatorException;
 import com.solo761.cartcreator.business.model.CartTypes;
@@ -17,22 +16,51 @@ import com.solo761.cartcreator.business.model.VarBBinTemplate;
 import com.solo761.cartcreator.business.utils.CartCreatorByteArrays;
 import com.solo761.cartcreator.business.utils.Utils;
 
-public class CartCreatorManagerImpl implements CartCreatorManager {
+public class Manager {
 	
 	private FileDao fileDao = new FileDaoImpl();
 	private CRTGenerator crtGenerator = new CRTGenerator(); 
 
-	@Override
+	
+	/**
+	 * <p>Loads file from file system intro byte array</p>
+	 * @param file - input File path
+	 * @return <b>byte[]</b> - loaded file
+	 * @throws IOException
+	 */
 	public byte[] loadFile(File file) throws IOException {
 		byte[] fileContent = fileDao.loadFile(file);
 		return fileContent;
 	}
-
-	@Override
+	
+	/**
+	 * <p>Saves byte array to file system</p>
+	 * @param data - byte array containing data to be saved
+	 * @param file - output File path
+	 * @throws IOException
+	 */
 	public void saveFile(byte[] data, File file) throws IOException {
 		fileDao.saveFile(data, file);
 	}
 	
+	/**
+	 * Creates bin file for (E)EPROM from prg<br>
+	 * <br>
+	 *		 cTypes:<br>
+	 *			HUCKY<br>
+	 *			INVERTEDHUCKY<br>
+	 *			MAGICDESK<br>
+	 *			SIXTEENK		-	not implemented yet<br>
+	 *			EIGHTK			-	not implemented yet<br>
+	 *<br>
+	 *		 lTypes:<br>
+	 *			PRG2CRT<br>
+	 *			HUCKY<br>
+	 * @param cType - CartTypes enum
+	 * @param lType - LoaderTypes enum
+	 * @param prg - byte[] with loaded prg
+	 * @return <b>byte[]</b> - prepared bin
+	 */
 	public byte[] createBinFile(CartTypes cType, LoaderTypes lType, byte[] prg) throws CartCreatorException {
 		
 		BinFileTemplate filePrep = null;
@@ -64,6 +92,24 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 			return filePrep.getFinalBin();
 	}
 	
+	/**
+	 * Creates CRT file for emulator from prg<br>
+	 * <br>
+	 *		 cTypes:<br>
+	 *			HUCKY<br>
+	 *			INVERTEDHUCKY<br>
+	 *			MAGICDESK<br>
+	 *			SIXTEENK		-	not implemented yet<br>
+	 *			EIGHTK			-	not implemented yet<br>
+	 *<br>
+	 *		 lTypes:<br>
+	 *			PRG2CRT<br>
+	 *			HUCKY<br>
+	 * @param type - CartTypes enum
+	 * @param lType - LoaderTypes enum
+	 * @param prg - byte[] with loaded prg
+	 * @return <b>byte[]</b> - prepared CRT file
+	 */
 	public byte[] createCRTFile(CartTypes cType, LoaderTypes lType, byte[] prg) throws CartCreatorException {
 		
 		BinFileTemplate filePrep = null;
