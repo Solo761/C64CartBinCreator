@@ -3,6 +3,7 @@ package com.solo761.cartcreator.business.manager;
 import java.io.File;
 import java.io.IOException;
 
+import com.solo761.cartcreator.business.model.CartCreatorException;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.LoaderTypes;
 
@@ -43,7 +44,7 @@ public interface CartCreatorManager {
 	 * @param prg - byte[] with loaded prg
 	 * @return <b>byte[]</b> - prepared bin
 	 */
-	public byte[] createBinFile(CartTypes cType, LoaderTypes lType, byte[] prg);
+	public byte[] createBinFile(CartTypes cType, LoaderTypes lType, byte[] prg) throws CartCreatorException;
 	
 	/**
 	 * Creates CRT file for emulator from prg<br>
@@ -63,6 +64,6 @@ public interface CartCreatorManager {
 	 * @param prg - byte[] with loaded prg
 	 * @return <b>byte[]</b> - prepared CRT file
 	 */
-	public byte[] createCRTFile(CartTypes cType, LoaderTypes lType, byte[] prg);
+	public byte[] createCRTFile(CartTypes cType, LoaderTypes lType, byte[] prg) throws CartCreatorException;
 
 }

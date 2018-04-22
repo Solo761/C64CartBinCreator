@@ -9,6 +9,7 @@ import com.solo761.cartcreator.business.fsdao.impl.FileDaoImpl;
 import com.solo761.cartcreator.business.logic.CRTGenerator;
 import com.solo761.cartcreator.business.manager.CartCreatorManager;
 import com.solo761.cartcreator.business.model.BinFileTemplate;
+import com.solo761.cartcreator.business.model.CartCreatorException;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.LoaderTypes;
 import com.solo761.cartcreator.business.model.VarABinTemplate;
@@ -32,7 +33,7 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 		fileDao.saveFile(data, file);
 	}
 	
-	public byte[] createBinFile(CartTypes cType, LoaderTypes lType, byte[] prg) {
+	public byte[] createBinFile(CartTypes cType, LoaderTypes lType, byte[] prg) throws CartCreatorException {
 		
 		BinFileTemplate filePrep = null;
 		
@@ -63,7 +64,7 @@ public class CartCreatorManagerImpl implements CartCreatorManager {
 			return filePrep.getFinalBin();
 	}
 	
-	public byte[] createCRTFile(CartTypes cType, LoaderTypes lType, byte[] prg) {
+	public byte[] createCRTFile(CartTypes cType, LoaderTypes lType, byte[] prg) throws CartCreatorException {
 		
 		BinFileTemplate filePrep = null;
 		

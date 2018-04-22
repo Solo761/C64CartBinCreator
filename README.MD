@@ -51,7 +51,7 @@ in command line to see help
 
 - Optional:
 	 - **-o \<output file\>** - output file to save converted file to, if it differs from input file
-	- **-h** - 				help`
+	- **-h** - help
 
 Order of parameters is not important.
 

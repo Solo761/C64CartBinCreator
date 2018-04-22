@@ -14,7 +14,7 @@ public class BinFileTemplate {
 	 *  ready to be bured to (E)EPROM
 	 * @return <b>byte</b>
 	 */
-	public byte[] getFinalBin() {
+	public byte[] getFinalBin()  throws CartCreatorException {
 		return null;
 	}
 	
@@ -22,7 +22,7 @@ public class BinFileTemplate {
 	 * need padding
 	 * @return <b>byte</b>
 	 */
-	public byte[] getCRTTemp() {
+	public byte[] getCRTTemp()  throws CartCreatorException {
 		return null;
 	}
 

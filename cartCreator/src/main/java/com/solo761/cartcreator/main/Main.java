@@ -30,7 +30,7 @@ public class Main{
 									"Try -h for help" );
 				return;
 			}
-			jobListProcessor.processJobList(jobList);
+			System.out.println( jobListProcessor.processJobList(jobList).toString() );
 		}
 		// else start GUI
 		else {

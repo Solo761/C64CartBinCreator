@@ -20,7 +20,7 @@ public class VarBBinTemplate extends BinFileTemplate {
 	private byte[] prgSize;
 
 	@Override
-	public byte[] getFinalBin() {
+	public byte[] getFinalBin() throws CartCreatorException {
 		// set first byte (low byte) of prgSize to byte 193 of loader
 		// set second byte (high byte) of prgSize to byte 199 of loader
 		// set first byte (low byte) of sysAddress to byte 209 of loader
@@ -40,7 +40,7 @@ public class VarBBinTemplate extends BinFileTemplate {
 		
 		// check if loader + prg are larger than 64 kB, if so return null
 		if (super.getLoaderPayload().length + super.getPrgPayload().length > 65536 )
-			return null;
+			throw new CartCreatorException( "Resulting file larger than 64 kB!" );
 		
 		ByteBuffer b = ByteBuffer.allocate(65536);
 		b.put(loader);
@@ -49,7 +49,7 @@ public class VarBBinTemplate extends BinFileTemplate {
 	}
 
 	@Override
-	public byte[] getCRTTemp() {
+	public byte[] getCRTTemp() throws CartCreatorException {
 		// set first byte (low byte) of prgSize to byte 193 of loader
 		// set second byte (high byte) of prgSize to byte 199 of loader
 		// set first byte (low byte) of sysAddress to byte 209 of loader
@@ -69,7 +69,7 @@ public class VarBBinTemplate extends BinFileTemplate {
 		
 		// check if loader + prg are larger than 64 kB, if so return null
 		if (super.getLoaderPayload().length + super.getPrgPayload().length > 65536 )
-			return null;
+			throw new CartCreatorException( "Resulting file larger than 64 kB!" );
 		
 		ByteBuffer b = ByteBuffer.allocate(loader.length + prg.length);
 		b.put(loader);

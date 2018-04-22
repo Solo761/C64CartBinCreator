@@ -12,6 +12,7 @@ import com.solo761.cartcreator.business.logic.JobListProcessor;
 import com.solo761.cartcreator.business.model.CartTypes;
 import com.solo761.cartcreator.business.model.FileData;
 import com.solo761.cartcreator.business.model.JobList;
+import com.solo761.cartcreator.business.model.JobResult;
 import com.solo761.cartcreator.business.model.LoaderTypes;
 import com.solo761.cartcreator.business.utils.Utils;
 
@@ -31,15 +32,19 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class MainWindowController implements Initializable {
 	
+	private static File lastUsedFileChooserDir = null;
 	private static GuiPrepareJobList guiJobListParser = new GuiPrepareJobList();
 	private static JobListProcessor jobListProcessor = new JobListProcessor();
 
@@ -195,10 +200,13 @@ public class MainWindowController implements Initializable {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle( "Select prg file:" );
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter( "Prg file", "*.prg" ),
-												 new ExtensionFilter( "All files", "*.*" ));
+											 	 new ExtensionFilter( "All files", "*.*" ));
+		if (lastUsedFileChooserDir != null)
+			fileChooser.setInitialDirectory(lastUsedFileChooserDir);
 		List<File> selectedFiles = fileChooser.showOpenMultipleDialog(btnAddFile.getScene().getWindow());
 		
 		if (selectedFiles != null && !selectedFiles.isEmpty())  {
+			lastUsedFileChooserDir = selectedFiles.get(0).getParentFile();
 			for (File file : selectedFiles) {
 				FileData newFile = new FileData(file.getAbsolutePath(), file.getName());
 				if ( !tableViewMain.getItems().contains(newFile) ) {
@@ -229,6 +237,8 @@ public class MainWindowController implements Initializable {
 	private void selectFolder() {
 		DirectoryChooser dirChooser = new DirectoryChooser();
 		dirChooser.setTitle("Choose output folder");
+		if (lastUsedFileChooserDir != null)
+			dirChooser.setInitialDirectory(lastUsedFileChooserDir);
 		File output = dirChooser.showDialog(btnBrowseOutput.getScene().getWindow());
 		
 		if (output != null)
@@ -301,7 +311,41 @@ public class MainWindowController implements Initializable {
 														   checkBoxCreateBin.isSelected(),
 														   checkBoxCreateCRT.isSelected() );
 		
-		jobListProcessor.processJobList(jobList);
+		JobResult jobResult = jobListProcessor.processJobList(jobList);
+		
+		Alert alert = new Alert(AlertType.INFORMATION);
+		TextArea textArea = new TextArea();
+		
+		alert.setTitle("Job done!");
+		alert.setHeaderText(null);
+		
+		if ( "".equals(jobResult.getErrors().trim()) ) {
+			alert.setContentText("Finished, click on details for more info.");
+			textArea.setText( jobResult.getProcessed() );
+		}
+		else { 
+			alert.setContentText("Finished but there were some errors, click on details for more info.");
+			textArea.setText( "OK:" + System.lineSeparator() + 
+					  jobResult.getProcessed() + System.lineSeparator() +
+					  "Errors:" + System.lineSeparator() + 
+					  jobResult.getErrors() );
+		}
+		
+		textArea.setEditable(false);
+		textArea.setWrapText(true);
+		textArea.setMaxWidth(Double.MAX_VALUE);
+		textArea.setMaxHeight(Double.MAX_VALUE);
+		GridPane.setVgrow(textArea, Priority.ALWAYS);
+		GridPane.setHgrow(textArea, Priority.ALWAYS);
+		
+		GridPane expContent = new GridPane();
+		expContent.setMaxWidth(Double.MAX_VALUE);
+		expContent.add(textArea, 0, 1);
+		
+		// Set expandable Exception into the dialog pane.
+		alert.getDialogPane().setExpandableContent(expContent);
+
+		alert.showAndWait();
 	}
 	
 }

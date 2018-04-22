@@ -17,11 +17,11 @@ public class VarABinTemplate extends BinFileTemplate {
 	private byte[] prgSize;
 
 	@Override
-	public byte[] getFinalBin() {
+	public byte[] getFinalBin() throws CartCreatorException {
 		
 		// check if loader + prgSize + prg are larger than 64 kB, if so return null
 		if (super.getLoaderPayload().length + prgSize.length + super.getPrgPayload().length > 65536 )
-			return null;
+			throw new CartCreatorException( "Resulting file larger than 64 kB!" );
 		
 		ByteBuffer b = ByteBuffer.allocate(65536);
 		b.put(super.getLoaderPayload());
@@ -32,11 +32,11 @@ public class VarABinTemplate extends BinFileTemplate {
 	}
 
 	@Override
-	public byte[] getCRTTemp() {
+	public byte[] getCRTTemp() throws CartCreatorException {
 		
 		// check if loader + prgSize + prg are larger than 64 kB, if so return null
 		if (super.getLoaderPayload().length + prgSize.length + super.getPrgPayload().length > 65536 )
-			return null;
+				throw new CartCreatorException( "Resulting file larger than 64 kB!" );
 		
 		ByteBuffer b = ByteBuffer.allocate(super.getLoaderPayload().length + prgSize.length + super.getPrgPayload().length);
 		b.put(super.getLoaderPayload());
